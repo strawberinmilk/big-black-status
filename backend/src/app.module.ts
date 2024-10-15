@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/db/User/user.entity';
 import { PitIns } from 'src/db/PitIn/pitIn.entity';
 import { PitInModule } from './api/pit-in/pit-in.module';
-import { ExampleModule } from './api/example/example.module';
 import { Parkings } from './db/Parking/parking.entity';
 import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
 
@@ -23,7 +22,6 @@ import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
       entities: [Users, PitIns, Parkings, ParkingRoads],
     }),
     PitInModule,
-    ExampleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
