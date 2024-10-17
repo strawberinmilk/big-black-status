@@ -1,0 +1,57 @@
+#0 building with "default" instance using docker driver
+
+#1 [frontend internal] load build definition from frontend.Dockerfile
+#1 transferring dockerfile: 277B done
+#1 DONE 0.0s
+
+#2 [frontend internal] load metadata for docker.io/library/node:20.10-alpine
+#2 DONE 0.0s
+
+#3 [frontend internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [frontend 1/8] FROM docker.io/library/node:20.10-alpine
+#4 DONE 0.0s
+
+#5 [frontend internal] load build context
+#5 transferring context: 1.06MB 0.4s done
+#5 DONE 0.4s
+
+#6 [frontend 4/8] RUN yarn set version 3.5.0
+#6 CACHED
+
+#7 [frontend 2/8] WORKDIR /app
+#7 CACHED
+
+#8 [frontend 3/8] RUN apk update
+#8 CACHED
+
+#9 [frontend 5/8] RUN yarn --version
+#9 CACHED
+
+#10 [frontend 6/8] COPY ./frontend/* ./
+#10 DONE 1.7s
+
+#11 [frontend 7/8] COPY ./frontend/package.json ./
+#11 DONE 0.0s
+
+#12 [frontend 8/8] RUN yarn install
+#12 0.437 yarn install v1.22.19
+#12 0.489 [1/4] Resolving packages...
+#12 7.237 [2/4] Fetching packages...
+#12 15.30 [3/4] Linking dependencies...
+#12 17.74 [4/4] Building fresh packages...
+#12 17.86 success Saved lockfile.
+#12 17.87 Done in 17.43s.
+#12 DONE 18.1s
+
+#13 [frontend] exporting to image
+#13 exporting layers
+#13 exporting layers 2.3s done
+#13 writing image sha256:b108c064eb292af42fc59631b2ef8759aeb65f6859ca54cba2ad5d3bbce6ca57 done
+#13 naming to docker.io/library/daikoku-frontend done
+#13 DONE 2.3s
+
+#14 [frontend] resolving provenance for metadata file
+#14 DONE 0.0s

@@ -5,7 +5,6 @@ ENV TZ=Asia/Tokyo
 WORKDIR /app
 
 RUN apk update
-RUN apk add yarn
 
 COPY ./backend/* ./
 COPY ./backend/package.json ./

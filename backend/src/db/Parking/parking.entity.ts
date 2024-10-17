@@ -7,7 +7,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { PitIns } from '../PitIn/pitIn.entity';
+import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ParkingRoads } from '../ParkingRoads/ParkingRoad.entity';
 
 @Unique(['id'])
@@ -33,8 +33,8 @@ export class Parkings {
   @Column('smallint', { comment: '半径', unique: true })
   radius: number;
 
-  @OneToMany(() => PitIns, (pitIns) => pitIns.user)
-  pitIns?: PitIns[];
+  @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
+  checkIns?: CheckIns[];
 
   @OneToMany(() => ParkingRoads, (parkingRoads) => parkingRoads.parking)
   parkingRoads?: ParkingRoads[];

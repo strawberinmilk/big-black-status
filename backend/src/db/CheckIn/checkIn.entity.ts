@@ -13,7 +13,7 @@ import { Parkings } from '../Parking/parking.entity';
 
 @Unique(['id'])
 @Entity()
-export class PitIns {
+export class CheckIns {
   @PrimaryGeneratedColumn()
   readonly id: number;
 

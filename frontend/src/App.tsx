@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-
+import axios from 'axios';
 const App = () => {
   const parkingList = [
     {
@@ -57,6 +57,12 @@ const App = () => {
         <p>ここは大黒ではありません</p>
       )}
       <p></p>
+
+      <Button onClick={async()=>{
+        await axios.get('http://example.com')
+        .then(()=>{alert('success')})
+        .catch(()=>{alert('error')})
+      }}>test</Button>
     </>
   );
 };

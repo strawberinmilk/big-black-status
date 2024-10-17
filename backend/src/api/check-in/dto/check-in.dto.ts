@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
 
-export class PitInRequest {
+export class CheckInRequest {
   // ユーザーID
   @IsInt()
   @IsNotEmpty()

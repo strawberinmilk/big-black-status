@@ -5799,9 +5799,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pit-in-daikoku@workspace:.":
+"check-in-daikoku@workspace:.":
   version: 0.0.0-use.local
-  resolution: "pit-in-daikoku@workspace:."
+  resolution: "check-in-daikoku@workspace:."
   dependencies:
     "@nestjs/cli": ^10.0.0
     "@nestjs/common": ^10.0.0

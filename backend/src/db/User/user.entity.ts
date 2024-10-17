@@ -8,7 +8,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { PitIns } from 'src/db/PitIn/pitIn.entity';
+import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
 
 @Unique(['id', 'screenName', 'email'])
 @Entity()
@@ -40,6 +40,6 @@ export class Users {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => PitIns, (pitIns) => pitIns.user)
-  pitIns?: PitIns[];
+  @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
+  checkIns?: CheckIns[];
 }

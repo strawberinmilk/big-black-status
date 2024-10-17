@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PitInRequest } from './dto/pit-in.dto';
-import { PitInRepository } from 'src/db/PitIn/pitin.repository';
+import { CheckInRequest } from './dto/check-in.dto';
+import { CheckInRepository } from 'src/db/CheckIn/checkIn.repository';
 import { UserRepository } from 'src/db/User/user.repository';
 import { ParkingRepository } from 'src/db/Parking/parking.repository';
 import { Parkings } from 'src/db/Parking/parking.entity';
@@ -17,45 +17,45 @@ const parkingList = [
 ];
 
 @Injectable()
-export class PitInService {
+export class CheckInService {
   constructor(
-    private readonly pitInRepository: PitInRepository,
+    private readonly checkInRepository: CheckInRepository,
     private readonly userRepository: UserRepository,
     private readonly parkingRepository: ParkingRepository,
   ) {}
 
   /**
    * 今いるパーキングエリアを取得
-   * @param pitInRequest
+   * @param checkInRequest
    * @returns
    */
-  async checkLocationParking(pitInRequest: PitInRequest) {
+  async checkLocationParking(checkInRequest: CheckInRequest) {
     // 今いるパーキングエリアを取得
     const currentParking = await this.getCurrentParking(
-      pitInRequest.latitude,
-      pitInRequest.longitude,
+      checkInRequest.latitude,
+      checkInRequest.longitude,
     );
     return currentParking;
   }
 
   /**
-   * ピットイン
-   * @param pitInRequest
+   * チェックイン
+   * @param checkInRequest
    * @returns
    */
-  async create(pitInRequest: PitInRequest) {
-    const user = await this.userRepository.findById(pitInRequest.userId);
+  async create(checkInRequest: CheckInRequest) {
+    const user = await this.userRepository.findById(checkInRequest.userId);
 
     // 今いるパーキングエリアを取得
     const currentParking = await this.getCurrentParking(
-      pitInRequest.latitude,
-      pitInRequest.longitude,
+      checkInRequest.latitude,
+      checkInRequest.longitude,
     );
-    // ピットイン
-    await this.pitInRepository.save({
+    // チェックイン
+    await this.checkInRepository.save({
       user,
-      latitude: pitInRequest.latitude,
-      longitude: pitInRequest.longitude,
+      latitude: checkInRequest.latitude,
+      longitude: checkInRequest.longitude,
       parking: currentParking,
     });
 

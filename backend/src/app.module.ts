@@ -3,8 +3,8 @@ import { AppController } from 'src/app.controller';
 import { AppService } from 'src/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/db/User/user.entity';
-import { PitIns } from 'src/db/PitIn/pitIn.entity';
-import { PitInModule } from './api/pit-in/pit-in.module';
+import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
+import { CheckInModule } from './api/check-in/check-in.module';
 import { Parkings } from './db/Parking/parking.entity';
 import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
 
@@ -19,9 +19,9 @@ import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
       database: process.env.POSTGRES_DB,
       logging: true,
       synchronize: true, // TODO: false
-      entities: [Users, PitIns, Parkings, ParkingRoads],
+      entities: [Users, CheckIns, Parkings, ParkingRoads],
     }),
-    PitInModule,
+    CheckInModule,
   ],
   controllers: [AppController],
   providers: [AppService],
