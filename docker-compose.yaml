@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./backend.Dockerfile
     ports:
-      - 13000:3000
+      - 10102:3000
     restart: always
     volumes:
       - ./backend:/app
@@ -31,7 +31,7 @@ services:
       context: .
       dockerfile: ./frontend.Dockerfile
     ports:
-      - 15173:5173
+      - 10101:5173
     restart: always
     volumes:
       - ./frontend:/app
@@ -48,7 +48,7 @@ services:
     container_name: daikoku-db
     image: postgres:13
     ports:
-      - 15432:5432
+      - 10103:5432
     restart: always
     volumes:
       - check_in_daikoku_db_initdbd:/docker-entrypoint-initdb.d

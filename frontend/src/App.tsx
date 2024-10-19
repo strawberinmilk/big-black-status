@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import axios from 'axios';
+import { API } from "./api/api";
 const App = () => {
   const parkingList = [
     {
-      'name': '大黒PA',
+      name: "大黒PA",
       lat: 35.46164868963681,
       lng: 139.67996120452884,
       radius: 200,
-    }
-  ]
+    },
+  ];
 
   const [lat, setLatitude] = useState(0); // 緯度
   const [lng, setLongitude] = useState(0); // 経度
@@ -50,19 +50,29 @@ const App = () => {
       <Button onClick={getLocation}>位置取得</Button>
       <p>緯度: {lat}</p>
       <p>経度: {lng}</p>
-      <p>大黒との距離: {distance(lat, lng, parkingList[0].lat, parkingList[0].lng)}</p>
-      {distance(lat, lng, parkingList[0].lat, parkingList[0].lng) < parkingList[0].radius ? (
+      <p>
+        大黒との距離:{" "}
+        {distance(lat, lng, parkingList[0].lat, parkingList[0].lng)}
+      </p>
+      {distance(lat, lng, parkingList[0].lat, parkingList[0].lng) <
+      parkingList[0].radius ? (
         <p>ここは大黒です</p>
       ) : (
         <p>ここは大黒ではありません</p>
       )}
       <p></p>
 
-      <Button onClick={async()=>{
-        await axios.get('http://example.com')
-        .then(()=>{alert('success')})
-        .catch(()=>{alert('error')})
-      }}>test</Button>
+      <Button
+        onClick={async () => {
+          await API.post("/api/check-in",{
+            
+          })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+        }}
+      >
+        test
+      </Button>
     </>
   );
 };
