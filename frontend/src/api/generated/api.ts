@@ -26,6 +26,43 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CheckIns
+ */
+export interface CheckIns {
+    /**
+     * 
+     * @type {number}
+     * @memberof CheckIns
+     */
+    'id': number;
+    /**
+     * 
+     * @type {Users}
+     * @memberof CheckIns
+     */
+    'user': Users;
+    /**
+     * 
+     * @type {Parkings}
+     * @memberof CheckIns
+     */
+    'parking': Parkings;
+    /**
+     * 
+     * @type {string}
+     * @memberof CheckIns
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CheckIns
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface GetCurrentParkingRequest
  */
 export interface GetCurrentParkingRequest {
@@ -41,6 +78,104 @@ export interface GetCurrentParkingRequest {
      * @memberof GetCurrentParkingRequest
      */
     'longitude': number;
+}
+/**
+ * 
+ * @export
+ * @interface ParkingRoads
+ */
+export interface ParkingRoads {
+    /**
+     * 
+     * @type {number}
+     * @memberof ParkingRoads
+     */
+    'id': number;
+    /**
+     * 
+     * @type {Parkings}
+     * @memberof ParkingRoads
+     */
+    'parking': Parkings;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParkingRoads
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParkingRoads
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParkingRoads
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface Parkings
+ */
+export interface Parkings {
+    /**
+     * 
+     * @type {number}
+     * @memberof Parkings
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Parkings
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Parkings
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Parkings
+     */
+    'longitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Parkings
+     */
+    'radius': number;
+    /**
+     * 
+     * @type {Array<CheckIns>}
+     * @memberof Parkings
+     */
+    'checkIns': Array<CheckIns>;
+    /**
+     * 
+     * @type {Array<ParkingRoads>}
+     * @memberof Parkings
+     */
+    'parkingRoads': Array<ParkingRoads>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Parkings
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Parkings
+     */
+    'updatedAt': string;
 }
 /**
  * 
@@ -66,6 +201,61 @@ export interface PostCheckInRequest {
      * @memberof PostCheckInRequest
      */
     'userId': number;
+}
+/**
+ * 
+ * @export
+ * @interface Users
+ */
+export interface Users {
+    /**
+     * 
+     * @type {number}
+     * @memberof Users
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'screenName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Users
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Users
+     */
+    'checkIns': Array<string>;
 }
 
 /**
@@ -163,7 +353,7 @@ export const CheckInApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Parkings>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.checkIn(postCheckInRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CheckInApi.checkIn']?.[localVarOperationServerIndex]?.url;
@@ -176,7 +366,7 @@ export const CheckInApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Parkings>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentParking(getCurrentParkingRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CheckInApi.getCurrentParking']?.[localVarOperationServerIndex]?.url;
@@ -199,7 +389,7 @@ export const CheckInApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<Parkings> {
             return localVarFp.checkIn(postCheckInRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -209,7 +399,7 @@ export const CheckInApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig): AxiosPromise<Parkings> {
             return localVarFp.getCurrentParking(getCurrentParkingRequest, options).then((request) => request(axios, basePath));
         },
     };

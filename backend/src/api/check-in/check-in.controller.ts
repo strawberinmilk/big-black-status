@@ -4,7 +4,8 @@ import {
   GetCurrentParkingRequest,
   PostCheckInRequest,
 } from './dto/check-in.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Parkings } from 'src/db/Parking/parking.entity';
 
 @ApiTags('check-in')
 @Controller('/api/check-in')
@@ -16,9 +17,14 @@ export class CheckInController {
     operationId: 'getCurrentParking',
     description: '現在地のパーキングの情報を取得する',
   })
+  @ApiResponse({
+    status: 200,
+    description: '現在地のパーキングの情報',
+    type: Parkings,
+  })
   checkLocationParking(
     @Body(new ValidationPipe()) req: GetCurrentParkingRequest,
-  ) {
+  ): Promise<Parkings> {
     return this.checkInService.checkLocationParking(req);
   }
 
@@ -27,7 +33,14 @@ export class CheckInController {
     operationId: 'checkIn',
     description: 'チェックインする',
   })
-  create(@Body(new ValidationPipe()) req: PostCheckInRequest) {
+  @ApiResponse({
+    status: 200,
+    description: 'チェックインしたパーキングの情報',
+    type: Parkings,
+  })
+  create(
+    @Body(new ValidationPipe()) req: PostCheckInRequest,
+  ): Promise<Parkings> {
     return this.checkInService.create(req);
   }
 }

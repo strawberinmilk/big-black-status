@@ -20,8 +20,12 @@ paths:
             schema:
               $ref: '#/components/schemas/GetCurrentParkingRequest'
       responses:
-        '201':
-          description: ''
+        '200':
+          description: 現在地のパーキングの情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parkings'
       tags: &ref_0
         - check-in
   /api/check-in:
@@ -37,8 +41,12 @@ paths:
             schema:
               $ref: '#/components/schemas/PostCheckInRequest'
       responses:
-        '201':
-          description: ''
+        '200':
+          description: チェックインしたパーキングの情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parkings'
       tags: *ref_0
 info:
   title: Cats example
@@ -65,6 +73,138 @@ components:
       required:
         - latitude
         - longitude
+    Users:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        screenName:
+          type: string
+          example: screenname
+        name:
+          type: string
+          example: name
+        email:
+          type: string
+          example: example@example.com
+        password:
+          type: string
+          example: password
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        checkIns:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - screenName
+        - name
+        - email
+        - password
+        - createdAt
+        - updatedAt
+        - checkIns
+    ParkingRoads:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        parking:
+          $ref: '#/components/schemas/Parkings'
+        name:
+          type: string
+          example: 道路名
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - parking
+        - name
+        - createdAt
+        - updatedAt
+    Parkings:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: 大黒PA
+        latitude:
+          type: number
+          example: 35.46164868963681
+        longitude:
+          type: number
+          example: 139.67996120452884
+        radius:
+          type: number
+          example: 200
+        checkIns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckIns'
+        parkingRoads:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParkingRoads'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+        - radius
+        - checkIns
+        - parkingRoads
+        - createdAt
+        - updatedAt
+    CheckIns:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        user:
+          $ref: '#/components/schemas/Users'
+        parking:
+          $ref: '#/components/schemas/Parkings'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - user
+        - parking
+        - createdAt
+        - updatedAt
     PostCheckInRequest:
       type: object
       properties:

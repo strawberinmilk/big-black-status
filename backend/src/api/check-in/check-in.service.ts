@@ -23,7 +23,7 @@ export class CheckInService {
    * @param req
    * @returns
    */
-  async checkLocationParking(req: GetCurrentParkingRequest) {
+  async checkLocationParking(req: GetCurrentParkingRequest): Promise<Parkings> {
     // 今いるパーキングエリアを取得
     const currentParking = await this.getCurrentParking(
       req.latitude,
@@ -37,7 +37,7 @@ export class CheckInService {
    * @param req
    * @returns
    */
-  async create(req: PostCheckInRequest) {
+  async create(req: PostCheckInRequest): Promise<Parkings> {
     const user = await this.userRepository.findById(req.userId);
 
     if (!user) {
