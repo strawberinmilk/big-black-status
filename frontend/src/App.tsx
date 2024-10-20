@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { API } from "./api/api";
+import { checkInApi } from "./api/api";
 const App = () => {
   const parkingList = [
     {
@@ -64,11 +64,10 @@ const App = () => {
 
       <Button
         onClick={async () => {
-          await API.post("/api/check-in",{
-            
-          })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+          await checkInApi
+            .checkIn({ userId: 1, latitude: lat, longitude: lng })
+            .then((res) => alert("チェックインしました"))
+            .catch((err) => alert(err));
         }}
       >
         test

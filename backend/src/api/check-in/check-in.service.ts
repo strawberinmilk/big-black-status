@@ -1,20 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CheckInRequest } from './dto/check-in.dto';
 import { CheckInRepository } from 'src/db/CheckIn/checkIn.repository';
 import { UserRepository } from 'src/db/User/user.repository';
 import { ParkingRepository } from 'src/db/Parking/parking.repository';
 import { Parkings } from 'src/db/Parking/parking.entity';
+import {
+  GetCurrentParkingRequest,
+  PostCheckInRequest,
+} from './dto/check-in.dto';
 
 const R = Math.PI / 180;
-
-const parkingList = [
-  {
-    name: '大黒PA',
-    lat: 35.46164868963681,
-    lng: 139.67996120452884,
-    radius: 200,
-  },
-];
 
 @Injectable()
 export class CheckInService {
@@ -26,36 +20,39 @@ export class CheckInService {
 
   /**
    * 今いるパーキングエリアを取得
-   * @param checkInRequest
+   * @param req
    * @returns
    */
-  async checkLocationParking(checkInRequest: CheckInRequest) {
+  async checkLocationParking(req: GetCurrentParkingRequest) {
     // 今いるパーキングエリアを取得
     const currentParking = await this.getCurrentParking(
-      checkInRequest.latitude,
-      checkInRequest.longitude,
+      req.latitude,
+      req.longitude,
     );
     return currentParking;
   }
 
   /**
    * チェックイン
-   * @param checkInRequest
+   * @param req
    * @returns
    */
-  async create(checkInRequest: CheckInRequest) {
-    const user = await this.userRepository.findById(checkInRequest.userId);
+  async create(req: PostCheckInRequest) {
+    const user = await this.userRepository.findById(req.userId);
 
+    if (!user) {
+      throw new BadRequestException('ユーザーが存在しません');
+    }
     // 今いるパーキングエリアを取得
     const currentParking = await this.getCurrentParking(
-      checkInRequest.latitude,
-      checkInRequest.longitude,
+      req.latitude,
+      req.longitude,
     );
     // チェックイン
     await this.checkInRepository.save({
       user,
-      latitude: checkInRequest.latitude,
-      longitude: checkInRequest.longitude,
+      latitude: req.latitude,
+      longitude: req.longitude,
       parking: currentParking,
     });
 

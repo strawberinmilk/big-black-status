@@ -1,0 +1,86 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /api/check-in/get-current-parking:
+    post:
+      operationId: getCurrentParking
+      summary: ''
+      description: 現在地のパーキングの情報を取得する
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCurrentParkingRequest'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_0
+        - check-in
+  /api/check-in:
+    post:
+      operationId: checkIn
+      summary: ''
+      description: チェックインする
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCheckInRequest'
+      responses:
+        '201':
+          description: ''
+      tags: *ref_0
+info:
+  title: Cats example
+  description: The cats API description
+  version: '1.0'
+  contact: {}
+tags:
+  - name: cats
+    description: ''
+servers: []
+components:
+  schemas:
+    GetCurrentParkingRequest:
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: 経度
+          example: 35.46164868963681
+        longitude:
+          type: number
+          description: 緯度
+          example: 139.67996120452884
+      required:
+        - latitude
+        - longitude
+    PostCheckInRequest:
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: 経度
+          example: 35.46164868963681
+        longitude:
+          type: number
+          description: 緯度
+          example: 139.67996120452884
+        userId:
+          type: number
+          description: ユーザID
+          example: 1
+      required:
+        - latitude
+        - longitude
+        - userId

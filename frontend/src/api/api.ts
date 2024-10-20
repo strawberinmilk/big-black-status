@@ -1,5 +1,5 @@
 import axios from "axios";
-
+/* 
 export class API {
   static createInstance() {
     const instance = axios.create({
@@ -26,3 +26,12 @@ export class API {
     .catch((err) => {return Promise.reject(err)});
   }
 }
+ */
+
+import { Configuration, CheckInApi } from "./generated";
+
+const config = new Configuration({
+  basePath: "https://cc52-106-72-191-104.ngrok-free.app",
+});
+
+export const checkInApi = new CheckInApi(config);
