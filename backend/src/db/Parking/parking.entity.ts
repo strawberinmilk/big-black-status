@@ -21,7 +21,7 @@ export class Parkings {
   })
   readonly id: number;
 
-  @Column('varchar', { comment: 'ユーザ名', unique: true })
+  @Column('varchar', { comment: 'PA名', unique: true })
   name: string;
 
   @Column('decimal', { comment: '経度', unique: true })
@@ -30,7 +30,7 @@ export class Parkings {
   @Column('decimal', { comment: '緯度', unique: true })
   longitude: number;
 
-  @Column('smallint', { comment: '半径', unique: true })
+  @Column('smallint', { comment: '半径' })
   radius: number;
 
   @OneToMany(() => CheckIns, (checkIns) => checkIns.user)

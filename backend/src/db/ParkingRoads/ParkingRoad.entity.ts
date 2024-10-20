@@ -25,6 +25,6 @@ export class ParkingRoads {
   @JoinColumn({ name: 'parkingId' })
   parking: Parkings;
 
-  @Column('varchar', { comment: '道路名', unique: true })
+  @Column('varchar', { comment: '道路名' })
   name: string;
 }

@@ -17,9 +17,9 @@ export class CheckInController {
     description: '現在地のパーキングの情報を取得する',
   })
   checkLocationParking(
-    @Body(new ValidationPipe()) checkInRequest: GetCurrentParkingRequest,
+    @Body(new ValidationPipe()) req: GetCurrentParkingRequest,
   ) {
-    return this.checkInService.checkLocationParking(checkInRequest);
+    return this.checkInService.checkLocationParking(req);
   }
 
   @Post()
@@ -27,7 +27,7 @@ export class CheckInController {
     operationId: 'checkIn',
     description: 'チェックインする',
   })
-  create(@Body(new ValidationPipe()) checkInRequest: PostCheckInRequest) {
-    return this.checkInService.create(checkInRequest);
+  create(@Body(new ValidationPipe()) req: PostCheckInRequest) {
+    return this.checkInService.create(req);
   }
 }
