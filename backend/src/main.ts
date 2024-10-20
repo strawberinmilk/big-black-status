@@ -3,17 +3,20 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { dump } from 'js-yaml';
 import * as fs from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
+  // CORS
+  console.log(configService.get<string>('FRONTEND_URL'));
   app.enableCors({
-    origin: [
-      'http://localhost:10101',
-      'https://24d9-106-72-191-104.ngrok-free.app',
-    ],
+    origin: [configService.get<string>('FRONTEND_URL')],
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   });
 
+  // OpenAPI
   const config = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')

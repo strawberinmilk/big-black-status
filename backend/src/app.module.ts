@@ -7,19 +7,27 @@ import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
 import { CheckInModule } from './api/check-in/check-in.module';
 import { Parkings } from './db/Parking/parking.entity';
 import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: 5432,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      logging: true,
-      synchronize: true, // TODO: false
-      entities: [Users, CheckIns, Parkings, ParkingRoads],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('POSTGRES_HOST'),
+        port: configService.get('POSTGRES_PORT'),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
+        logging: true,
+        synchronize: true, // TODO: false
+        entities: [Users, CheckIns, Parkings, ParkingRoads],
+      }),
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     CheckInModule,
   ],

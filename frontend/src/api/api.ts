@@ -31,7 +31,7 @@ export class API {
 import { Configuration, CheckInApi } from "./generated";
 
 const config = new Configuration({
-  basePath: "https://cc52-106-72-191-104.ngrok-free.app",
+  basePath: import.meta.env.VITE_BACKEND_URL,
 });
 
 export const checkInApi = new CheckInApi(config);
