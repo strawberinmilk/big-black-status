@@ -40,13 +40,13 @@ export class Users {
   @ApiProperty({ example: 'password' })
   password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  createdAt: Date;
+  createdAt: string;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  updatedAt: Date;
+  updatedAt: string;
 
   @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
   @ApiProperty()

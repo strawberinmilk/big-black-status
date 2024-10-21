@@ -48,6 +48,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/Parkings'
       tags: *ref_0
+  /api/check-in/get-user-here:
+    post:
+      operationId: getUserHere
+      summary: ''
+      description: パーキングにいるユーザを取得する
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserHereRequest'
+      responses:
+        '200':
+          description: パーキングにいるユーザを取得する
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+      tags: *ref_0
 info:
   title: Cats example
   description: The cats API description
@@ -224,3 +246,12 @@ components:
         - latitude
         - longitude
         - userId
+    GetUserHereRequest:
+      type: object
+      properties:
+        parkingId:
+          type: number
+          description: パーキングID
+          example: 1
+      required:
+        - parkingId

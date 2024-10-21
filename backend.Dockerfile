@@ -1,7 +1,7 @@
 FROM node:20.10-alpine
 
 ENV LANG=ja_JP.UTF-8
-ENV TZ=Asia/Tokyo
+ENV TZ=UTC
 WORKDIR /app
 
 RUN apk update

@@ -23,9 +23,10 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      NODE_ENV: development
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       FRONTEND_URL: ${FRONTEND_URL}
+      NODE_ENV: development
+      TZ: UTC
 
   frontend:
     container_name: daikoku-fe
@@ -44,8 +45,9 @@ services:
     logging:
       driver: json-file
     environment:
-      NODE_ENV: development
       VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+      NODE_ENV: development
+      TZ: UTC
 
   postgres:
     container_name: daikoku-db
@@ -61,9 +63,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      TZ: UTC
 
 volumes:
   check_in_daikoku_db_initdbd:
   check_in_daikoku_db_data:
   be_node_modules:
   fe_node_modules:
+
+networks:
+  daikoku-network:
+    driver: bridge

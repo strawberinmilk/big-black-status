@@ -2,10 +2,12 @@ import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { CheckInService } from './check-in.service';
 import {
   GetCurrentParkingRequest,
+  GetUserHereRequest,
   PostCheckInRequest,
 } from './dto/check-in.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parkings } from 'src/db/Parking/parking.entity';
+import { Users } from 'src/db/User/user.entity';
 
 @ApiTags('check-in')
 @Controller('/api/check-in')
@@ -42,5 +44,21 @@ export class CheckInController {
     @Body(new ValidationPipe()) req: PostCheckInRequest,
   ): Promise<Parkings> {
     return this.checkInService.create(req);
+  }
+
+  @Post('get-user-here')
+  @ApiOperation({
+    operationId: 'getUserHere',
+    description: 'パーキングにいるユーザを取得する',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'パーキングにいるユーザを取得する',
+    type: [Users],
+  })
+  getUserHere(
+    @Body(new ValidationPipe()) req: GetUserHereRequest,
+  ): Promise<Users[]> {
+    return this.checkInService.getUserHere(req);
   }
 }

@@ -23,6 +23,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         database: configService.get('POSTGRES_DB'),
         logging: true,
         synchronize: true, // TODO: false
+        timezone: 'UTC',
         entities: [Users, CheckIns, Parkings, ParkingRoads],
       }),
     }),

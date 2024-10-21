@@ -47,11 +47,11 @@ export class Parkings {
   @ApiProperty({ type: () => ParkingRoads, isArray: true })
   parkingRoads?: ParkingRoads[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  createdAt: Date;
+  createdAt: string;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  updatedAt: Date;
+  updatedAt: string;
 }

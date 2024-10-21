@@ -34,11 +34,11 @@ export class ParkingRoads {
   @ApiProperty({ example: '道路名' })
   name: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  createdAt: Date;
+  createdAt: string;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
-  updatedAt: Date;
+  updatedAt: string;
 }

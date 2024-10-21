@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
 
 export class Point {
-  // 経度
   @ApiProperty({
     type: Number,
     description: '経度',
@@ -14,7 +13,6 @@ export class Point {
   @IsNotEmpty()
   latitude: number;
 
-  // 緯度
   @ApiProperty({
     type: Number,
     description: '緯度',
@@ -30,7 +28,6 @@ export class Point {
 export class GetCurrentParkingRequest extends Point {}
 
 export class PostCheckInRequest extends Point {
-  // ユーザーID
   @ApiProperty({
     type: Number,
     description: 'ユーザID',
@@ -39,4 +36,15 @@ export class PostCheckInRequest extends Point {
   @IsInt()
   @IsNotEmpty()
   userId: number;
+}
+
+export class GetUserHereRequest {
+  @ApiProperty({
+    type: Number,
+    description: 'パーキングID',
+    example: 1,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  parkingId: number;
 }

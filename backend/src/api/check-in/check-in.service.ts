@@ -5,10 +5,19 @@ import { ParkingRepository } from 'src/db/Parking/parking.repository';
 import { Parkings } from 'src/db/Parking/parking.entity';
 import {
   GetCurrentParkingRequest,
+  GetUserHereRequest,
   PostCheckInRequest,
 } from './dto/check-in.dto';
+import * as turf from '@turf/turf';
+import { MoreThan } from 'typeorm';
+import * as dayjs from 'dayjs';
+// import 'dayjs/locale/ja';
+import * as utc from 'dayjs/plugin/utc';
+import * as timezone from 'dayjs/plugin/timezone';
 
-const R = Math.PI / 180;
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Asia/Tokyo');
 
 @Injectable()
 export class CheckInService {
@@ -74,20 +83,12 @@ export class CheckInService {
     });
     // 範囲内のパーキングエリアを取得
     const currentParking = parkingList.find((parking) => {
-      let [paLat, paLon] = [parking.latitude, parking.longitude];
+      const [paLat, paLon] = [parking.latitude, parking.longitude];
 
-      inputLat *= R;
-      inputLon *= R;
-      paLat *= R;
-      paLon *= R;
-      const km =
-        6371 *
-        Math.acos(
-          Math.cos(inputLat) * Math.cos(paLat) * Math.cos(paLon - inputLon) +
-            Math.sin(inputLat) * Math.sin(paLat),
-        );
-
-      if (km * 1000 < parking.radius) {
+      const from = turf.point([inputLon, inputLat]);
+      const to = turf.point([paLon, paLat]);
+      const distance = turf.distance(from, to);
+      if (distance < parking.radius / 1000) {
         return true;
       }
     });
@@ -95,5 +96,24 @@ export class CheckInService {
       throw new BadRequestException('パーキングエリアにいません');
     }
     return currentParking;
+  }
+
+  async getUserHere(req: GetUserHereRequest) {
+    const twoHoursAgo = dayjs.tz().subtract(2, 'hour');
+
+    const user = await this.userRepository.find({
+      relations: {
+        checkIns: true,
+      },
+      where: {
+        checkIns: {
+          parking: {
+            id: req.parkingId,
+          },
+          createdAt: MoreThan(twoHoursAgo.format()),
+        },
+      },
+    });
+    return user;
   }
 }

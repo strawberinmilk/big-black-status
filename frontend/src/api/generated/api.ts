@@ -82,6 +82,19 @@ export interface GetCurrentParkingRequest {
 /**
  * 
  * @export
+ * @interface GetUserHereRequest
+ */
+export interface GetUserHereRequest {
+    /**
+     * パーキングID
+     * @type {number}
+     * @memberof GetUserHereRequest
+     */
+    'parkingId': number;
+}
+/**
+ * 
+ * @export
  * @interface ParkingRoads
  */
 export interface ParkingRoads {
@@ -336,6 +349,42 @@ export const CheckInApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * パーキングにいるユーザを取得する
+         * @summary 
+         * @param {GetUserHereRequest} getUserHereRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserHere: async (getUserHereRequest: GetUserHereRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getUserHereRequest' is not null or undefined
+            assertParamExists('getUserHere', 'getUserHereRequest', getUserHereRequest)
+            const localVarPath = `/api/check-in/get-user-here`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getUserHereRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -372,6 +421,19 @@ export const CheckInApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['CheckInApi.getCurrentParking']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * パーキングにいるユーザを取得する
+         * @summary 
+         * @param {GetUserHereRequest} getUserHereRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUserHere(getUserHereRequest: GetUserHereRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Users>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserHere(getUserHereRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CheckInApi.getUserHere']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -401,6 +463,16 @@ export const CheckInApiFactory = function (configuration?: Configuration, basePa
          */
         getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig): AxiosPromise<Parkings> {
             return localVarFp.getCurrentParking(getCurrentParkingRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パーキングにいるユーザを取得する
+         * @summary 
+         * @param {GetUserHereRequest} getUserHereRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUserHere(getUserHereRequest: GetUserHereRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<Users>> {
+            return localVarFp.getUserHere(getUserHereRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -434,6 +506,18 @@ export class CheckInApi extends BaseAPI {
      */
     public getCurrentParking(getCurrentParkingRequest: GetCurrentParkingRequest, options?: RawAxiosRequestConfig) {
         return CheckInApiFp(this.configuration).getCurrentParking(getCurrentParkingRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーキングにいるユーザを取得する
+     * @summary 
+     * @param {GetUserHereRequest} getUserHereRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CheckInApi
+     */
+    public getUserHere(getUserHereRequest: GetUserHereRequest, options?: RawAxiosRequestConfig) {
+        return CheckInApiFp(this.configuration).getUserHere(getUserHereRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
