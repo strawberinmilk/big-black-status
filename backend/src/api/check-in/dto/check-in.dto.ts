@@ -36,15 +36,24 @@ export class PostCheckInRequest extends Point {
   @IsInt()
   @IsNotEmpty()
   userId: number;
+
+  @ApiProperty({
+    type: Number,
+    description: '道路ID',
+    example: 1,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  roadId: number;
 }
 
 export class GetUserHereRequest {
   @ApiProperty({
     type: Number,
-    description: 'パーキングID',
+    description: 'パーキング道路ID',
     example: 1,
   })
   @IsInt()
   @IsNotEmpty()
-  parkingId: number;
+  parkingRoadId: number;
 }

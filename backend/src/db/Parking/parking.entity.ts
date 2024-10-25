@@ -7,7 +7,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { CheckIns } from '../CheckIn/checkIn.entity';
+// import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ParkingRoads } from '../ParkingRoads/ParkingRoad.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -39,9 +39,9 @@ export class Parkings {
   @ApiProperty({ example: 200 })
   radius: number;
 
-  @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
-  @ApiProperty({ type: () => CheckIns, isArray: true })
-  checkIns?: CheckIns[];
+  // @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
+  // @ApiProperty({ type: () => CheckIns, isArray: true })
+  // checkIns?: CheckIns[];
 
   @OneToMany(() => ParkingRoads, (parkingRoads) => parkingRoads.parking)
   @ApiProperty({ type: () => ParkingRoads, isArray: true })

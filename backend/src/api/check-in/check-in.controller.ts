@@ -8,6 +8,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parkings } from 'src/db/Parking/parking.entity';
 import { Users } from 'src/db/User/user.entity';
+import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 
 @ApiTags('check-in')
 @Controller('/api/check-in')
@@ -38,11 +39,11 @@ export class CheckInController {
   @ApiResponse({
     status: 200,
     description: 'チェックインしたパーキングの情報',
-    type: Parkings,
+    type: ParkingRoads,
   })
   create(
     @Body(new ValidationPipe()) req: PostCheckInRequest,
-  ): Promise<Parkings> {
+  ): Promise<ParkingRoads> {
     return this.checkInService.create(req);
   }
 

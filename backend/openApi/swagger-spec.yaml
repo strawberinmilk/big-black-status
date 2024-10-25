@@ -46,7 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Parkings'
+                $ref: '#/components/schemas/ParkingRoads'
       tags: *ref_0
   /api/check-in/get-user-here:
     post:
@@ -95,6 +95,43 @@ components:
       required:
         - latitude
         - longitude
+    Parkings:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: 大黒PA
+        latitude:
+          type: number
+          example: 35.46164868963681
+        longitude:
+          type: number
+          example: 139.67996120452884
+        radius:
+          type: number
+          example: 200
+        parkingRoads:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParkingRoads'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+        - radius
+        - parkingRoads
+        - createdAt
+        - updatedAt
     Users:
       type: object
       properties:
@@ -132,6 +169,28 @@ components:
         - createdAt
         - updatedAt
         - checkIns
+    CheckIns:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        user:
+          $ref: '#/components/schemas/Users'
+        parkingRoad:
+          $ref: '#/components/schemas/ParkingRoads'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - user
+        - parkingRoad
+        - createdAt
+        - updatedAt
     ParkingRoads:
       type: object
       properties:
@@ -143,44 +202,10 @@ components:
         name:
           type: string
           example: 道路名
-        createdAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-        updatedAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-      required:
-        - id
-        - parking
-        - name
-        - createdAt
-        - updatedAt
-    Parkings:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 1
-        name:
-          type: string
-          example: 大黒PA
-        latitude:
-          type: number
-          example: 35.46164868963681
-        longitude:
-          type: number
-          example: 139.67996120452884
-        radius:
-          type: number
-          example: 200
         checkIns:
           type: array
           items:
             $ref: '#/components/schemas/CheckIns'
-        parkingRoads:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParkingRoads'
         createdAt:
           type: string
           example: '2024-10-01T00:00:00.000Z'
@@ -189,34 +214,9 @@ components:
           example: '2024-10-01T00:00:00.000Z'
       required:
         - id
-        - name
-        - latitude
-        - longitude
-        - radius
-        - checkIns
-        - parkingRoads
-        - createdAt
-        - updatedAt
-    CheckIns:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 1
-        user:
-          $ref: '#/components/schemas/Users'
-        parking:
-          $ref: '#/components/schemas/Parkings'
-        createdAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-        updatedAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-      required:
-        - id
-        - user
         - parking
+        - name
+        - checkIns
         - createdAt
         - updatedAt
     PostCheckInRequest:
@@ -234,16 +234,21 @@ components:
           type: number
           description: ユーザID
           example: 1
+        roadId:
+          type: number
+          description: 道路ID
+          example: 1
       required:
         - latitude
         - longitude
         - userId
+        - roadId
     GetUserHereRequest:
       type: object
       properties:
-        parkingId:
+        parkingRoadId:
           type: number
-          description: パーキングID
+          description: パーキング道路ID
           example: 1
       required:
-        - parkingId
+        - parkingRoadId

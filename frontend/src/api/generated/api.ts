@@ -43,10 +43,10 @@ export interface CheckIns {
     'user': Users;
     /**
      * 
-     * @type {Parkings}
+     * @type {ParkingRoads}
      * @memberof CheckIns
      */
-    'parking': Parkings;
+    'parkingRoad': ParkingRoads;
     /**
      * 
      * @type {string}
@@ -86,11 +86,11 @@ export interface GetCurrentParkingRequest {
  */
 export interface GetUserHereRequest {
     /**
-     * パーキングID
+     * パーキング道路ID
      * @type {number}
      * @memberof GetUserHereRequest
      */
-    'parkingId': number;
+    'parkingRoadId': number;
 }
 /**
  * 
@@ -116,6 +116,12 @@ export interface ParkingRoads {
      * @memberof ParkingRoads
      */
     'name': string;
+    /**
+     * 
+     * @type {Array<CheckIns>}
+     * @memberof ParkingRoads
+     */
+    'checkIns': Array<CheckIns>;
     /**
      * 
      * @type {string}
@@ -167,12 +173,6 @@ export interface Parkings {
     'radius': number;
     /**
      * 
-     * @type {Array<CheckIns>}
-     * @memberof Parkings
-     */
-    'checkIns': Array<CheckIns>;
-    /**
-     * 
      * @type {Array<ParkingRoads>}
      * @memberof Parkings
      */
@@ -214,6 +214,12 @@ export interface PostCheckInRequest {
      * @memberof PostCheckInRequest
      */
     'userId': number;
+    /**
+     * 道路ID
+     * @type {number}
+     * @memberof PostCheckInRequest
+     */
+    'roadId': number;
 }
 /**
  * 
@@ -402,7 +408,7 @@ export const CheckInApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Parkings>> {
+        async checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ParkingRoads>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.checkIn(postCheckInRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CheckInApi.checkIn']?.[localVarOperationServerIndex]?.url;
@@ -451,7 +457,7 @@ export const CheckInApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<Parkings> {
+        checkIn(postCheckInRequest: PostCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<ParkingRoads> {
             return localVarFp.checkIn(postCheckInRequest, options).then((request) => request(axios, basePath));
         },
         /**

@@ -8,15 +8,20 @@ import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
 import { CheckInRepository } from 'src/db/CheckIn/checkIn.repository';
 import { ParkingRepository } from 'src/db/Parking/parking.repository';
 import { Parkings } from 'src/db/Parking/parking.entity';
+import { ParkingRoadRepository } from 'src/db/ParkingRoads/ParkingRoad';
+import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, CheckIns, Parkings])],
+  imports: [
+    TypeOrmModule.forFeature([Users, CheckIns, Parkings, ParkingRoads]),
+  ],
   controllers: [CheckInController],
   providers: [
     CheckInService,
     UserRepository,
     CheckInRepository,
     ParkingRepository,
+    ParkingRoadRepository,
   ],
 })
 export class CheckInModule {}
