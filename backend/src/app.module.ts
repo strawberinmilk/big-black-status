@@ -8,6 +8,7 @@ import { CheckInModule } from './api/check-in/check-in.module';
 import { Parkings } from './db/Parking/parking.entity';
 import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DateUtilModule } from './util/dateUtil/dateUtil.module';
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       isGlobal: true,
     }),
     CheckInModule,
+    {
+      global: true,
+      module: DateUtilModule,
+    },
   ],
   controllers: [AppController],
   providers: [AppService],

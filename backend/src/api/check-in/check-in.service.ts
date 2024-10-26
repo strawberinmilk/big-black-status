@@ -9,18 +9,13 @@ import {
   PostCheckInRequest,
 } from './dto/check-in.dto';
 import * as turf from '@turf/turf';
-import { In, MoreThan } from 'typeorm';
-import * as dayjs from 'dayjs';
-// import 'dayjs/locale/ja';
-import * as utc from 'dayjs/plugin/utc';
-import * as timezone from 'dayjs/plugin/timezone';
+import { MoreThan } from 'typeorm';
+
 import { ParkingRoadRepository } from 'src/db/ParkingRoads/ParkingRoad';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Tokyo');
+import { DateUtilService } from 'src/util/dateUtil/dateUtil.service';
 
 @Injectable()
 export class CheckInService {
@@ -29,6 +24,7 @@ export class CheckInService {
     private readonly userRepository: UserRepository,
     private readonly parkingRepository: ParkingRepository,
     private readonly parkingRoadRepository: ParkingRoadRepository,
+    private readonly dateUtil: DateUtilService,
   ) {}
 
   /**
@@ -52,7 +48,6 @@ export class CheckInService {
    */
   async create(req: PostCheckInRequest): Promise<ParkingRoads> {
     // ユーザが存在するか確認
-    const twoHoursAgo = dayjs.tz().subtract(2, 'hour');
     const user = await this.userRepository.findOne({
       where: {
         id: req.userId,
@@ -65,11 +60,11 @@ export class CheckInService {
     // 連続チェックインにならないか確認
     const checkIns = await this.checkInRepository.find({
       where: {
-        createdAt: MoreThan(twoHoursAgo.format()),
+        createdAt: MoreThan(this.dateUtil.getTimeBeforeNow(2, 'hour')),
       },
       relations: {
         parkingRoad: true,
-      }
+      },
     });
     if (checkIns.length && checkIns[0].parkingRoad.id === req.roadId) {
       throw new BadRequestException('連続チェックインはできません');
@@ -140,7 +135,7 @@ export class CheckInService {
    * @returns
    */
   async getUserHere(req: GetUserHereRequest) {
-    const twoHoursAgo = dayjs.tz().subtract(2, 'hour');
+    const twoHoursAgo = this.dateUtil.getTimeBeforeNow(2, 'hour');
     /*
     // 二時間以内にその駐車場にチェックインしたユーザを取得
     const filterParling = await this.userRepository.find({
