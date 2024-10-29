@@ -1,10 +1,13 @@
-import { Button, Input } from "@mui/material";
+import { Button } from "@mui/material";
 import { checkInApi } from "../api/api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../api/generated";
+import { SnackContext } from "../common/snack.gcomponent";
 
 export const CheckInComponents = () => {
   const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
+
+  const { setSnack } = useContext(SnackContext);
 
   // パーキングはページを開いた時点でロード
   const [currentParking, setCurrentParking] = useState<Parkings | null>(null);
@@ -26,7 +29,11 @@ export const CheckInComponents = () => {
         longitude: position.coords.longitude,
       };
     } catch {
-      alert("位置情報が取得できませんでした");
+      setSnack({
+        isOpen: true,
+        type: "error",
+        message: "位置情報が取得できませんでした",
+      });
     }
   };
 
@@ -37,7 +44,13 @@ export const CheckInComponents = () => {
     await checkInApi
       .getCurrentParking(position)
       .then((res) => setCurrentParking(res.data))
-      .catch(() => alert("パーキングが取得できませんでした"));
+      .catch(() => {
+        setSnack({
+          isOpen: true,
+          type: "error",
+          message: "パーキングエリアが取得できませんでした",
+        });
+      });
     return position;
   };
 
@@ -49,21 +62,34 @@ export const CheckInComponents = () => {
     await checkInApi
       .checkIn({ userId, roadId, ...position })
       .then(async (res) => {
-        alert(
-          `${res.data.parking.name} ${res.data.name}にチェックインしました`
-        );
+        setSnack({
+          isOpen: true,
+          type: "success",
+          message: `${res.data.parking.name} ${res.data.name}にチェックインしました`,
+        });
         setCurrentParking(res.data.parking);
         setCurrentRoad(res.data);
         await getUserHere(res.data.id);
       })
-      .catch(() => alert("チェックインに失敗しました"));
+      .catch(() =>
+        setSnack({
+          isOpen: true,
+          type: "error",
+          message: "チェックインに失敗しました",
+        })
+      );
   };
 
   // チェックイン後パーキングにいるユーザを取得
   const getUserHere = async (parkingRoadId: number) => {
-    const res = await checkInApi
-      .getUserHere({ parkingRoadId })
-      .catch(() => alert("ユーザーが取得できませんでした"));
+    const res = await checkInApi.getUserHere({ parkingRoadId }).catch(() =>
+      setSnack({
+        isOpen: true,
+        type: "error",
+        message: "ユーザーが取得できませんでした",
+      })
+    );
+
     if (!res) return;
     setHereUsers(res.data.filter((user) => user.id !== userId));
   };
@@ -130,6 +156,20 @@ export const CheckInComponents = () => {
       <Button onClick={() => setUserId(1)}>1</Button>
       <Button onClick={() => setUserId(2)}>2</Button>
       <Button onClick={() => setUserId(3)}>3</Button>
+      <br />
+      <br />
+      <br />
+      <Button
+        onClick={() => {
+          setSnack({
+            isOpen: true,
+            type: "success",
+            message: "チェックインしました",
+          });
+        }}
+      >
+        currentParking
+      </Button>
     </>
   );
 };
