@@ -132,6 +132,60 @@ components:
         - parkingRoads
         - createdAt
         - updatedAt
+    CloseStatuses:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        status:
+          type: string
+          example: close
+        statusJpName:
+          type: string
+          example: 閉鎖
+        close:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closes'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - status
+        - statusJpName
+        - close
+        - createdAt
+        - updatedAt
+    Closes:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        closeStatus:
+          $ref: '#/components/schemas/CloseStatuses'
+        parkingRoad:
+          $ref: '#/components/schemas/ParkingRoads'
+        user:
+          $ref: '#/components/schemas/Users'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - closeStatus
+        - parkingRoad
+        - user
+        - createdAt
+        - updatedAt
     Users:
       type: object
       properties:
@@ -160,6 +214,10 @@ components:
           type: array
           items:
             type: string
+        close:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closes'
       required:
         - id
         - screenName
@@ -169,6 +227,7 @@ components:
         - createdAt
         - updatedAt
         - checkIns
+        - close
     CheckIns:
       type: object
       properties:
@@ -202,23 +261,28 @@ components:
         name:
           type: string
           example: 道路名
-        checkIns:
-          type: array
-          items:
-            $ref: '#/components/schemas/CheckIns'
         createdAt:
           type: string
           example: '2024-10-01T00:00:00.000Z'
         updatedAt:
           type: string
           example: '2024-10-01T00:00:00.000Z'
+        checkIns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckIns'
+        close:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closes'
       required:
         - id
         - parking
         - name
-        - checkIns
         - createdAt
         - updatedAt
+        - checkIns
+        - close
     PostCheckInRequest:
       type: object
       properties:

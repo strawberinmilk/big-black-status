@@ -8,8 +8,9 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
+import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Closes } from '../Close/close.entity';
 
 @Unique(['id', 'screenName', 'email'])
 @Entity()
@@ -51,4 +52,8 @@ export class Users {
   @OneToMany(() => CheckIns, (checkIns) => checkIns.user)
   @ApiProperty()
   checkIns?: CheckIns[];
+
+  @OneToMany(() => Closes, (close) => close.closeStatus)
+  @ApiProperty({ type: () => Closes, isArray: true })
+  close?: Closes[];
 }

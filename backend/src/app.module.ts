@@ -9,6 +9,8 @@ import { Parkings } from './db/Parking/parking.entity';
 import { ParkingRoads } from './db/ParkingRoads/ParkingRoad.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DateUtilModule } from './util/dateUtil/dateUtil.module';
+import { Closes } from './db/Close/close.entity';
+import { CloseStatuses } from './db/CloseStatus/closeStatus.entity';
 
 @Module({
   imports: [
@@ -23,9 +25,16 @@ import { DateUtilModule } from './util/dateUtil/dateUtil.module';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
         logging: true,
-        synchronize: true, // TODO: false
+        synchronize: false,
         timezone: 'UTC',
-        entities: [Users, CheckIns, Parkings, ParkingRoads],
+        entities: [
+          Users,
+          CheckIns,
+          Parkings,
+          ParkingRoads,
+          Closes,
+          CloseStatuses,
+        ],
       }),
     }),
     ConfigModule.forRoot({

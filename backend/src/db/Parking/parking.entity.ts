@@ -7,7 +7,6 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-// import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ParkingRoads } from '../ParkingRoads/ParkingRoad.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
