@@ -1,0 +1,128 @@
+import { MigrationInterface, QueryRunner } from "typeorm";
+
+export class Migrations1731130269420 implements MigrationInterface {
+    name = 'Migrations1731130269420'
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "FK_f720bd2e21496a35edf31ab18a8"`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP CONSTRAINT "PK_ff5851f221bd241a0e959403f9b"`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP CONSTRAINT "UQ_ff5851f221bd241a0e959403f9b"`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD "id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD CONSTRAINT "PK_ff5851f221bd241a0e959403f9b" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD CONSTRAINT "UQ_ff5851f221bd241a0e959403f9b" UNIQUE ("id")`);
+        await queryRunner.query(`COMMENT ON COLUMN "parkings"."id" IS 'パーキングエリアID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_c5f928363a94110b8f7c7971153"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP CONSTRAINT "PK_e5ae05aa658cf10d40f40ee2d30"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP CONSTRAINT "UQ_e5ae05aa658cf10d40f40ee2d30"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD "id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD CONSTRAINT "PK_e5ae05aa658cf10d40f40ee2d30" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD CONSTRAINT "UQ_e5ae05aa658cf10d40f40ee2d30" UNIQUE ("id")`);
+        await queryRunner.query(`COMMENT ON COLUMN "close_statuses"."id" IS 'クローズステータスID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_f862ab5852e21546209ebc15808"`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_8888ecc96176b40f17fae856f0d"`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "closeStatusId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "closeStatusId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."closeStatusId" IS 'クローズステータスID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "parkingRoadId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "parkingRoadId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."parkingRoadId" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "userId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "userId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."userId" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP CONSTRAINT "FK_c15fc7ca821e8f342f08847de91"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "PK_f905ddff5cdcc19706615461e8e"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "UQ_f905ddff5cdcc19706615461e8e"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD "id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "PK_f905ddff5cdcc19706615461e8e" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "UQ_f905ddff5cdcc19706615461e8e" UNIQUE ("id")`);
+        await queryRunner.query(`COMMENT ON COLUMN "parking_roads"."id" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP COLUMN "parkingId"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD "parkingId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "parking_roads"."parkingId" IS 'パーキングエリアID'`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP CONSTRAINT "FK_068598d393a3d4eb0b776d08a91"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP COLUMN "userId"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD "userId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "check_ins"."userId" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP COLUMN "parkingRoadId"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD "parkingRoadId" integer NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "check_ins"."parkingRoadId" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "UQ_cc33226150d1f0d6c409977179c"`);
+        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433"`);
+        await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "users" ADD "id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id")`);
+        await queryRunner.query(`COMMENT ON COLUMN "users"."id" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "UQ_cc33226150d1f0d6c409977179c" UNIQUE ("id", "screenName", "email")`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_c5f928363a94110b8f7c7971153" FOREIGN KEY ("closeStatusId") REFERENCES "close_statuses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_f862ab5852e21546209ebc15808" FOREIGN KEY ("parkingRoadId") REFERENCES "parking_roads"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_8888ecc96176b40f17fae856f0d" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "FK_f720bd2e21496a35edf31ab18a8" FOREIGN KEY ("parkingId") REFERENCES "parkings"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD CONSTRAINT "FK_068598d393a3d4eb0b776d08a91" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD CONSTRAINT "FK_c15fc7ca821e8f342f08847de91" FOREIGN KEY ("parkingRoadId") REFERENCES "parking_roads"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP CONSTRAINT "FK_c15fc7ca821e8f342f08847de91"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP CONSTRAINT "FK_068598d393a3d4eb0b776d08a91"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "FK_f720bd2e21496a35edf31ab18a8"`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_8888ecc96176b40f17fae856f0d"`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_f862ab5852e21546209ebc15808"`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP CONSTRAINT "FK_c5f928363a94110b8f7c7971153"`);
+        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "UQ_cc33226150d1f0d6c409977179c"`);
+        await queryRunner.query(`COMMENT ON COLUMN "users"."id" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "users" DROP CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433"`);
+        await queryRunner.query(`ALTER TABLE "users" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "users" ADD "id" SMALLSERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "users" ADD CONSTRAINT "UQ_cc33226150d1f0d6c409977179c" UNIQUE ("id", "screenName", "email")`);
+        await queryRunner.query(`COMMENT ON COLUMN "check_ins"."parkingRoadId" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP COLUMN "parkingRoadId"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD "parkingRoadId" smallint NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "check_ins"."userId" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "check_ins" DROP COLUMN "userId"`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD "userId" smallint NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD CONSTRAINT "FK_068598d393a3d4eb0b776d08a91" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`COMMENT ON COLUMN "parking_roads"."parkingId" IS 'パーキングエリアID'`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP COLUMN "parkingId"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD "parkingId" smallint NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "parking_roads"."id" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "UQ_f905ddff5cdcc19706615461e8e"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP CONSTRAINT "PK_f905ddff5cdcc19706615461e8e"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD "id" SMALLSERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "UQ_f905ddff5cdcc19706615461e8e" UNIQUE ("id")`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "PK_f905ddff5cdcc19706615461e8e" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "check_ins" ADD CONSTRAINT "FK_c15fc7ca821e8f342f08847de91" FOREIGN KEY ("parkingRoadId") REFERENCES "parking_roads"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."userId" IS 'ユーザID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "userId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "userId" smallint NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."parkingRoadId" IS 'パーキング道路ID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "parkingRoadId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "parkingRoadId" smallint NOT NULL`);
+        await queryRunner.query(`COMMENT ON COLUMN "closes"."closeStatusId" IS 'クローズステータスID'`);
+        await queryRunner.query(`ALTER TABLE "closes" DROP COLUMN "closeStatusId"`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD "closeStatusId" smallint NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_8888ecc96176b40f17fae856f0d" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_f862ab5852e21546209ebc15808" FOREIGN KEY ("parkingRoadId") REFERENCES "parking_roads"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`COMMENT ON COLUMN "close_statuses"."id" IS 'クローズステータスID'`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP CONSTRAINT "UQ_e5ae05aa658cf10d40f40ee2d30"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP CONSTRAINT "PK_e5ae05aa658cf10d40f40ee2d30"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD "id" SMALLSERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD CONSTRAINT "UQ_e5ae05aa658cf10d40f40ee2d30" UNIQUE ("id")`);
+        await queryRunner.query(`ALTER TABLE "close_statuses" ADD CONSTRAINT "PK_e5ae05aa658cf10d40f40ee2d30" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "closes" ADD CONSTRAINT "FK_c5f928363a94110b8f7c7971153" FOREIGN KEY ("closeStatusId") REFERENCES "close_statuses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`COMMENT ON COLUMN "parkings"."id" IS 'パーキングエリアID'`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP CONSTRAINT "UQ_ff5851f221bd241a0e959403f9b"`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP CONSTRAINT "PK_ff5851f221bd241a0e959403f9b"`);
+        await queryRunner.query(`ALTER TABLE "parkings" DROP COLUMN "id"`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD "id" SMALLSERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD CONSTRAINT "UQ_ff5851f221bd241a0e959403f9b" UNIQUE ("id")`);
+        await queryRunner.query(`ALTER TABLE "parkings" ADD CONSTRAINT "PK_ff5851f221bd241a0e959403f9b" PRIMARY KEY ("id")`);
+        await queryRunner.query(`ALTER TABLE "parking_roads" ADD CONSTRAINT "FK_f720bd2e21496a35edf31ab18a8" FOREIGN KEY ("parkingId") REFERENCES "parkings"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    }
+
+}

@@ -16,7 +16,7 @@ import { CloseStatuses } from '../CloseStatus/closeStatus.entity';
 @Entity()
 export class Closes {
   @PrimaryGeneratedColumn()
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, type: 'int' })
   readonly id: number;
 
   @ManyToOne(() => CloseStatuses, (closeStatus) => closeStatus.id, {

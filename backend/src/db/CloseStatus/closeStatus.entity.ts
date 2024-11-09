@@ -16,7 +16,7 @@ export class CloseStatuses {
   @PrimaryGeneratedColumn({
     name: 'id',
     unsigned: true,
-    type: 'smallint',
+    type: 'int',
     comment: 'クローズステータスID',
   })
   @ApiProperty({ example: 1 })

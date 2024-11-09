@@ -17,7 +17,7 @@ import { ParkingRoads } from '../ParkingRoads/ParkingRoad.entity';
 @Entity()
 export class CheckIns {
   @PrimaryGeneratedColumn()
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, type: 'int' })
   readonly id: number;
 
   @ManyToOne(() => Users, (user) => user.id, {
@@ -26,13 +26,6 @@ export class CheckIns {
   @JoinColumn({ name: 'userId' })
   @ApiProperty({ type: () => Users })
   user: Users;
-
-  // @ManyToOne(() => Parkings, (parking) => parking.id, {
-  //   nullable: false,
-  // })
-  // @JoinColumn({ name: 'parkingId' })
-  // @ApiProperty({ type: () => Parkings })
-  // parking: Parkings;
 
   @ManyToOne(() => ParkingRoads, (parkingRoad) => parkingRoad.id, {
     nullable: false,

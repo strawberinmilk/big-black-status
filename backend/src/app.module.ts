@@ -11,6 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DateUtilModule } from './util/dateUtil/dateUtil.module';
 import { Closes } from './db/Close/close.entity';
 import { CloseStatuses } from './db/CloseStatus/closeStatus.entity';
+import { CloseModule } from './api/close/close.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CloseStatuses } from './db/CloseStatus/closeStatus.entity';
       global: true,
       module: DateUtilModule,
     },
+    CloseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

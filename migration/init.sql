@@ -44,3 +44,9 @@ INSERT INTO public.users (id,"screenName",name,email,"password","createdAt","upd
 	 (1,'testUser','testUser','testUser','testUser','2024-10-22 02:02:26.652957+09','2024-10-22 02:02:28.544063+09'),
 	 (2,'testUser2','testUser2','testUser2','testUser2','2024-10-22 02:02:26.652957+09','2024-10-22 02:02:28.544063+09'),
 	 (3,'testUser3','testUser3','testUser3','testUser3','2024-10-22 02:02:26.652957+09','2024-10-22 02:02:28.544063+09');
+
+INSERT INTO public.close_statuses (id,status,"statusJpName","createdAt","updatedAt") VALUES
+	 (1,'open','オープン','2024-11-09 14:36:44.660685+09','2024-11-09 14:36:44.660685+09'),
+	 (2,'display_clear','閉鎖表示解除','2024-11-09 14:36:44.678376+09','2024-11-09 14:36:44.678376+09'),
+	 (3,'close_display','閉鎖(掲示板)','2024-11-09 14:36:44.680108+09','2024-11-09 14:36:44.680108+09'),
+	 (4,'close_local','閉鎖(直接確認)','2024-11-09 14:36:44.681735+09','2024-11-09 14:36:44.681735+09');

@@ -16,7 +16,7 @@ export class Parkings {
   @PrimaryGeneratedColumn({
     name: 'id',
     unsigned: true,
-    type: 'smallint',
+    type: 'int',
     comment: 'パーキングエリアID',
   })
   @ApiProperty({ example: 1 })

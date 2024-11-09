@@ -18,7 +18,7 @@ export class Users {
   @PrimaryGeneratedColumn({
     name: 'id',
     unsigned: true,
-    type: 'smallint',
+    type: 'int',
     comment: 'ユーザID',
   })
   @IsInt()
