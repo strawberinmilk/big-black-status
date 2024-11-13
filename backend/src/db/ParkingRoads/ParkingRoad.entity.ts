@@ -49,7 +49,7 @@ export class ParkingRoads {
   @ApiProperty({ type: () => CheckIns, isArray: true })
   checkIns?: CheckIns[];
 
-  @OneToMany(() => Closes, (close) => close.closeStatus)
+  @OneToMany(() => Closes, (close) => close.parkingRoad)
   @ApiProperty({ type: () => Closes, isArray: true })
-  close?: Closes[];
+  closes: Closes[];
 }

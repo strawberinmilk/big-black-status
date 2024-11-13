@@ -70,6 +70,64 @@ paths:
                 items:
                   $ref: '#/components/schemas/Users'
       tags: *ref_0
+  /api/close/pa-list:
+    get:
+      operationId: pa-list
+      summary: ''
+      description: パーキングエリアのリストを取得する
+      parameters: []
+      responses:
+        '200':
+          description: パーキングエリアのリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parkings'
+  /api/close/status-list:
+    get:
+      operationId: status-list
+      summary: ''
+      description: 閉鎖ステータスのリストを取得する
+      parameters: []
+      responses:
+        '200':
+          description: 閉鎖ステータスのリスト
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloseStatuses'
+  /api/close:
+    post:
+      operationId: post
+      summary: ''
+      description: 閉鎖状況を投稿する
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClosePostRequest'
+      responses:
+        '200':
+          description: 投稿結果
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Closes'
+  /api/close/status:
+    get:
+      operationId: status
+      summary: ''
+      description: 閉鎖状況を取得する
+      parameters: []
+      responses:
+        '200':
+          description: 閉鎖状況を取得する
 info:
   title: Cats example
   description: The cats API description
@@ -95,43 +153,6 @@ components:
       required:
         - latitude
         - longitude
-    Parkings:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 1
-        name:
-          type: string
-          example: 大黒PA
-        latitude:
-          type: number
-          example: 35.46164868963681
-        longitude:
-          type: number
-          example: 139.67996120452884
-        radius:
-          type: number
-          example: 200
-        parkingRoads:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParkingRoads'
-        createdAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-        updatedAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-      required:
-        - id
-        - name
-        - latitude
-        - longitude
-        - radius
-        - parkingRoads
-        - createdAt
-        - updatedAt
     CloseStatuses:
       type: object
       properties:
@@ -159,31 +180,6 @@ components:
         - status
         - statusJpName
         - close
-        - createdAt
-        - updatedAt
-    Closes:
-      type: object
-      properties:
-        id:
-          type: int
-          example: 1
-        closeStatus:
-          $ref: '#/components/schemas/CloseStatuses'
-        parkingRoad:
-          $ref: '#/components/schemas/ParkingRoads'
-        user:
-          $ref: '#/components/schemas/Users'
-        createdAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-        updatedAt:
-          type: string
-          example: '2024-10-01T00:00:00.000Z'
-      required:
-        - id
-        - closeStatus
-        - parkingRoad
-        - user
         - createdAt
         - updatedAt
     Users:
@@ -228,6 +224,73 @@ components:
         - updatedAt
         - checkIns
         - close
+    Closes:
+      type: object
+      properties:
+        id:
+          type: int
+          example: 1
+        closeStatus:
+          $ref: '#/components/schemas/CloseStatuses'
+        parkingRoad:
+          $ref: '#/components/schemas/ParkingRoads'
+        user:
+          $ref: '#/components/schemas/Users'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - closeStatus
+        - parkingRoad
+        - user
+        - createdAt
+        - updatedAt
+    Parkings:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: 大黒PA
+        latitude:
+          type: number
+          example: 35.46164868963681
+        longitude:
+          type: number
+          example: 139.67996120452884
+        radius:
+          type: number
+          example: 200
+        parkingRoads:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParkingRoads'
+        close:
+          type: array
+          items:
+            $ref: '#/components/schemas/Closes'
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+        - radius
+        - parkingRoads
+        - close
+        - createdAt
+        - updatedAt
     CheckIns:
       type: object
       properties:
@@ -271,7 +334,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CheckIns'
-        close:
+        closes:
           type: array
           items:
             $ref: '#/components/schemas/Closes'
@@ -282,7 +345,7 @@ components:
         - createdAt
         - updatedAt
         - checkIns
-        - close
+        - closes
     PostCheckInRequest:
       type: object
       properties:
@@ -316,3 +379,22 @@ components:
           example: 1
       required:
         - parkingRoadId
+    ClosePostRequest:
+      type: object
+      properties:
+        parkingRoadId:
+          type: number
+          description: 道路ID
+          example: 1
+        closeStatusId:
+          type: number
+          description: 閉鎖ステータスID
+          example: 1
+        userId:
+          type: number
+          description: ユーザID
+          example: 1
+      required:
+        - parkingRoadId
+        - closeStatusId
+        - userId

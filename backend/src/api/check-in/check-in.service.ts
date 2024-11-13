@@ -11,11 +11,14 @@ import {
 import * as turf from '@turf/turf';
 import { MoreThan } from 'typeorm';
 
-import { ParkingRoadRepository } from 'src/db/ParkingRoads/ParkingRoad';
+import { ParkingRoadRepository } from 'src/db/ParkingRoads/ParkingRoad.repository';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 import { CheckIns } from 'src/db/CheckIn/checkIn.entity';
 
-import { DateUtilService } from 'src/util/dateUtil/dateUtil.service';
+import {
+  DateUtilService,
+  TIMEFORMAT,
+} from 'src/util/dateUtil/dateUtil.service';
 
 @Injectable()
 export class CheckInService {
@@ -60,7 +63,11 @@ export class CheckInService {
     // 連続チェックインにならないか確認
     const checkIns = await this.checkInRepository.find({
       where: {
-        createdAt: MoreThan(this.dateUtil.getTimeBeforeNow(2, 'hour')),
+        createdAt: MoreThan(
+          this.dateUtil
+            .getTimeBeforeNow(2, 'hour')
+            .format(TIMEFORMAT.timestamp),
+        ),
       },
       relations: {
         parkingRoad: true,
@@ -135,7 +142,9 @@ export class CheckInService {
    * @returns
    */
   async getUserHere(req: GetUserHereRequest) {
-    const twoHoursAgo = this.dateUtil.getTimeBeforeNow(2, 'hour');
+    const twoHoursAgo = this.dateUtil
+      .getTimeBeforeNow(2, 'hour')
+      .format(TIMEFORMAT.timestamp);
     /*
     // 二時間以内にその駐車場にチェックインしたユーザを取得
     const filterParling = await this.userRepository.find({

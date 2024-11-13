@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { ParkingRoads } from '../ParkingRoads/ParkingRoad.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Closes } from '../Close/close.entity';
 
 @Unique(['id'])
 @Entity()
@@ -45,6 +46,10 @@ export class Parkings {
   @OneToMany(() => ParkingRoads, (parkingRoads) => parkingRoads.parking)
   @ApiProperty({ type: () => ParkingRoads, isArray: true })
   parkingRoads?: ParkingRoads[];
+
+  @OneToMany(() => Closes, (close) => close.closeStatus)
+  @ApiProperty({ type: () => Closes, isArray: true })
+  close?: Closes[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })
