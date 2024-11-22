@@ -14,19 +14,8 @@ import { DataSource, MoreThan, QueryBuilder } from 'typeorm';
 import dayjs from 'dayjs';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 import { Parkings } from 'src/db/Parking/parking.entity';
-
-type CloseStatusList = {
-  parkingId: number;
-  parkingName: string;
-  parkingRoadId: number;
-  parkingRoadName: string;
-  
-  closeStatusSplitTime: {
-    [from: string]: {
-      [statusName: string]: number;
-    };
-  };
-};
+import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
+import { CloseStatusList } from './dto/close.dto';
 
 @Injectable()
 export class CloseService {
@@ -39,7 +28,7 @@ export class CloseService {
     private readonly dateUtil: DateUtilService,
   ) {}
 
-  async paList() {
+  async paList(): Promise<Parkings[]> {
     return this.parkingRepository.find({
       relations: {
         parkingRoads: true,
@@ -47,11 +36,11 @@ export class CloseService {
     });
   }
 
-  async statusList() {
+  async statusList(): Promise<CloseStatuses[]> {
     return this.closeStatusRepository.find();
   }
 
-  async post(input: ClosePostRequest) {
+  async post(input: ClosePostRequest): Promise<Closes> {
     const closeStatus = await this.closeStatusRepository.findOne({
       where: { id: input.closeStatusId },
     });
@@ -68,7 +57,7 @@ export class CloseService {
     });
   }
 
-  async status() {
+  async status(): Promise<CloseStatusList[]> {
     const sixHoursAgo = this.dateUtil.getTimeBeforeNow(6, 'hour');
     const sixHoursAgoStr = sixHoursAgo.format();
     console.log(sixHoursAgoStr);
@@ -142,6 +131,7 @@ export class CloseService {
         parkingRoadId: road.id,
         parkingRoadName: road.name,
         closeStatusSplitTime: {},
+        last30MinuteStatus: JSON.parse(JSON.stringify(closeStatusRaw)),
       };
       for (const time of timeList) {
         roadData.closeStatusSplitTime[
@@ -150,13 +140,16 @@ export class CloseService {
       }
 
       for (const close of road.closes) {
+        const updatedAt = this.dateUtil.getDayJs(close.updatedAt);
         for (const time of timeList) {
-          const updatedAt = this.dateUtil.getDayJs(close.updatedAt);
           if (updatedAt.isAfter(time.from) && updatedAt.isBefore(time.to)) {
             roadData.closeStatusSplitTime[
               time.from.format(TIMEFORMAT.timeDisplay)
             ][close.closeStatus.status]++;
           }
+        }
+        if (this.dateUtil.getTimeBeforeNow(30, 'minute').isBefore(updatedAt)) {
+          roadData.last30MinuteStatus[close.closeStatus.status]++;
         }
       }
       closeStatusList.push(roadData);

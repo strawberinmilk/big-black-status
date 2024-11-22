@@ -1,11 +1,13 @@
 import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { CloseService } from './close.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parkings } from 'src/db/Parking/parking.entity';
 import { ClosePostRequest } from './dto/close.dto';
 import { Closes } from 'src/db/Close/close.entity';
 import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
+import { CloseStatusList } from './dto/close.dto';
 
+@ApiTags('close')
 @Controller('api/close')
 export class CloseController {
   constructor(private readonly closeService: CloseService) {}
@@ -60,9 +62,9 @@ export class CloseController {
   @ApiResponse({
     status: 200,
     description: '閉鎖状況を取得する',
-    // type: any,
+    type: [CloseStatusList],
   })
-  async status(): Promise<any> {
+  async status(): Promise<CloseStatusList[]> {
     return await this.closeService.status();
   }
 }

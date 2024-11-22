@@ -63,6 +63,160 @@ export interface CheckIns {
 /**
  * 
  * @export
+ * @interface ClosePostRequest
+ */
+export interface ClosePostRequest {
+    /**
+     * 道路ID
+     * @type {number}
+     * @memberof ClosePostRequest
+     */
+    'parkingRoadId': number;
+    /**
+     * 閉鎖ステータスID
+     * @type {number}
+     * @memberof ClosePostRequest
+     */
+    'closeStatusId': number;
+    /**
+     * ユーザID
+     * @type {number}
+     * @memberof ClosePostRequest
+     */
+    'userId': number;
+}
+/**
+ * 
+ * @export
+ * @interface CloseStatusList
+ */
+export interface CloseStatusList {
+    /**
+     * パーキングID
+     * @type {number}
+     * @memberof CloseStatusList
+     */
+    'parkingId': number;
+    /**
+     * パーキング名
+     * @type {number}
+     * @memberof CloseStatusList
+     */
+    'parkingName': number;
+    /**
+     * パーキング道路ID
+     * @type {number}
+     * @memberof CloseStatusList
+     */
+    'parkingRoadId': number;
+    /**
+     * パーキング道路名
+     * @type {number}
+     * @memberof CloseStatusList
+     */
+    'parkingRoadName': number;
+    /**
+     * 閉鎖ステータスID
+     * @type {object}
+     * @memberof CloseStatusList
+     */
+    'closeStatusSplitTime': object;
+    /**
+     * 30分間の投稿数
+     * @type {object}
+     * @memberof CloseStatusList
+     */
+    'last30MinuteStatus': object;
+}
+/**
+ * 
+ * @export
+ * @interface CloseStatuses
+ */
+export interface CloseStatuses {
+    /**
+     * 
+     * @type {number}
+     * @memberof CloseStatuses
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'status': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'statusJpName': string;
+    /**
+     * 
+     * @type {Array<Closes>}
+     * @memberof CloseStatuses
+     */
+    'close': Array<Closes>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface Closes
+ */
+export interface Closes {
+    /**
+     * 
+     * @type {number}
+     * @memberof Closes
+     */
+    'id': number;
+    /**
+     * 
+     * @type {CloseStatuses}
+     * @memberof Closes
+     */
+    'closeStatus': CloseStatuses;
+    /**
+     * 
+     * @type {ParkingRoads}
+     * @memberof Closes
+     */
+    'parkingRoad': ParkingRoads;
+    /**
+     * 
+     * @type {Users}
+     * @memberof Closes
+     */
+    'user': Users;
+    /**
+     * 
+     * @type {string}
+     * @memberof Closes
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Closes
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface GetCurrentParkingRequest
  */
 export interface GetCurrentParkingRequest {
@@ -118,12 +272,6 @@ export interface ParkingRoads {
     'name': string;
     /**
      * 
-     * @type {Array<CheckIns>}
-     * @memberof ParkingRoads
-     */
-    'checkIns': Array<CheckIns>;
-    /**
-     * 
      * @type {string}
      * @memberof ParkingRoads
      */
@@ -134,6 +282,18 @@ export interface ParkingRoads {
      * @memberof ParkingRoads
      */
     'updatedAt': string;
+    /**
+     * 
+     * @type {Array<CheckIns>}
+     * @memberof ParkingRoads
+     */
+    'checkIns': Array<CheckIns>;
+    /**
+     * 
+     * @type {Array<Closes>}
+     * @memberof ParkingRoads
+     */
+    'closes': Array<Closes>;
 }
 /**
  * 
@@ -177,6 +337,12 @@ export interface Parkings {
      * @memberof Parkings
      */
     'parkingRoads': Array<ParkingRoads>;
+    /**
+     * 
+     * @type {Array<Closes>}
+     * @memberof Parkings
+     */
+    'close': Array<Closes>;
     /**
      * 
      * @type {string}
@@ -275,6 +441,12 @@ export interface Users {
      * @memberof Users
      */
     'checkIns': Array<string>;
+    /**
+     * 
+     * @type {Array<Closes>}
+     * @memberof Users
+     */
+    'close': Array<Closes>;
 }
 
 /**
@@ -524,6 +696,302 @@ export class CheckInApi extends BaseAPI {
      */
     public getUserHere(getUserHereRequest: GetUserHereRequest, options?: RawAxiosRequestConfig) {
         return CheckInApiFp(this.configuration).getUserHere(getUserHereRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CloseApi - axios parameter creator
+ * @export
+ */
+export const CloseApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * パーキングエリアのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/close/pa-list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 閉鎖状況を投稿する
+         * @summary 
+         * @param {ClosePostRequest} closePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        post: async (closePostRequest: ClosePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'closePostRequest' is not null or undefined
+            assertParamExists('post', 'closePostRequest', closePostRequest)
+            const localVarPath = `/api/close`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(closePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 閉鎖状況を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        status: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/close/status`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 閉鎖ステータスのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        statusList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/close/status-list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CloseApi - functional programming interface
+ * @export
+ */
+export const CloseApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CloseApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * パーキングエリアのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async paList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Parkings>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CloseApi.paList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 閉鎖状況を投稿する
+         * @summary 
+         * @param {ClosePostRequest} closePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async post(closePostRequest: ClosePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Closes>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.post(closePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CloseApi.post']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 閉鎖状況を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async status(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CloseStatusList>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.status(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CloseApi.status']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 閉鎖ステータスのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async statusList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CloseStatuses>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.statusList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CloseApi.statusList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CloseApi - factory interface
+ * @export
+ */
+export const CloseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CloseApiFp(configuration)
+    return {
+        /**
+         * パーキングエリアのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paList(options?: RawAxiosRequestConfig): AxiosPromise<Array<Parkings>> {
+            return localVarFp.paList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 閉鎖状況を投稿する
+         * @summary 
+         * @param {ClosePostRequest} closePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        post(closePostRequest: ClosePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<Closes> {
+            return localVarFp.post(closePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 閉鎖状況を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        status(options?: RawAxiosRequestConfig): AxiosPromise<Array<CloseStatusList>> {
+            return localVarFp.status(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 閉鎖ステータスのリストを取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        statusList(options?: RawAxiosRequestConfig): AxiosPromise<Array<CloseStatuses>> {
+            return localVarFp.statusList(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CloseApi - object-oriented interface
+ * @export
+ * @class CloseApi
+ * @extends {BaseAPI}
+ */
+export class CloseApi extends BaseAPI {
+    /**
+     * パーキングエリアのリストを取得する
+     * @summary 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CloseApi
+     */
+    public paList(options?: RawAxiosRequestConfig) {
+        return CloseApiFp(this.configuration).paList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 閉鎖状況を投稿する
+     * @summary 
+     * @param {ClosePostRequest} closePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CloseApi
+     */
+    public post(closePostRequest: ClosePostRequest, options?: RawAxiosRequestConfig) {
+        return CloseApiFp(this.configuration).post(closePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 閉鎖状況を取得する
+     * @summary 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CloseApi
+     */
+    public status(options?: RawAxiosRequestConfig) {
+        return CloseApiFp(this.configuration).status(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 閉鎖ステータスのリストを取得する
+     * @summary 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CloseApi
+     */
+    public statusList(options?: RawAxiosRequestConfig) {
+        return CloseApiFp(this.configuration).statusList(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

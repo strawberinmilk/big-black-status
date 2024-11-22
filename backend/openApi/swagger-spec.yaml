@@ -85,6 +85,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Parkings'
+      tags: &ref_1
+        - close
   /api/close/status-list:
     get:
       operationId: status-list
@@ -100,6 +102,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CloseStatuses'
+      tags: *ref_1
   /api/close:
     post:
       operationId: post
@@ -119,6 +122,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Closes'
+      tags: *ref_1
   /api/close/status:
     get:
       operationId: status
@@ -128,6 +132,13 @@ paths:
       responses:
         '200':
           description: 閉鎖状況を取得する
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloseStatusList'
+      tags: *ref_1
 info:
   title: Cats example
   description: The cats API description
@@ -398,3 +409,46 @@ components:
         - parkingRoadId
         - closeStatusId
         - userId
+    CloseStatusList:
+      type: object
+      properties:
+        parkingId:
+          type: number
+          description: パーキングID
+          example: 1
+        parkingName:
+          type: number
+          description: パーキング名
+          example: 1
+        parkingRoadId:
+          type: number
+          description: パーキング道路ID
+          example: 1
+        parkingRoadName:
+          type: number
+          description: パーキング道路名
+          example: 1
+        closeStatusSplitTime:
+          type: object
+          description: 閉鎖ステータスID
+          example:
+            '23:00':
+              open: 1
+              display_clear: 0
+              close_display: 2
+              close_real: 1
+        last30MinuteStatus:
+          type: object
+          description: 30分間の投稿数
+          example:
+            open: 1
+            display_clear: 0
+            close_display: 2
+            close_real: 1
+      required:
+        - parkingId
+        - parkingName
+        - parkingRoadId
+        - parkingRoadName
+        - closeStatusSplitTime
+        - last30MinuteStatus

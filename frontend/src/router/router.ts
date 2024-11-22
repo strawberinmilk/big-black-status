@@ -1,4 +1,5 @@
 import { HomePage } from "../pages/home.page";
+import { ClosePage } from "../pages/close.page";
 import { TimelinePage } from "../pages/timeline.page";
 
 export const routes = [
@@ -9,5 +10,9 @@ export const routes = [
   {
     path: "/timeline",
     Component: TimelinePage,
+  },
+  {
+    path: "/close",
+    Component: ClosePage,
   },
 ];

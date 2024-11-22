@@ -21,8 +21,11 @@
     "@turf/turf": "^7.1.0",
     "@types/turf": "^3.5.32",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "mui": "^0.0.1",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0"
   },
