@@ -88,45 +88,15 @@ export interface ClosePostRequest {
 /**
  * 
  * @export
- * @interface CloseStatusList
+ * @interface CloseStatusLists
  */
-export interface CloseStatusList {
+export interface CloseStatusLists {
     /**
-     * パーキングID
-     * @type {number}
-     * @memberof CloseStatusList
+     * 閉鎖状況のリスト
+     * @type {{ [key: string]: any; }}
+     * @memberof CloseStatusLists
      */
-    'parkingId': number;
-    /**
-     * パーキング名
-     * @type {number}
-     * @memberof CloseStatusList
-     */
-    'parkingName': number;
-    /**
-     * パーキング道路ID
-     * @type {number}
-     * @memberof CloseStatusList
-     */
-    'parkingRoadId': number;
-    /**
-     * パーキング道路名
-     * @type {number}
-     * @memberof CloseStatusList
-     */
-    'parkingRoadName': number;
-    /**
-     * 閉鎖ステータスID
-     * @type {object}
-     * @memberof CloseStatusList
-     */
-    'closeStatusSplitTime': object;
-    /**
-     * 30分間の投稿数
-     * @type {object}
-     * @memberof CloseStatusList
-     */
-    'last30MinuteStatus': object;
+    'list': { [key: string]: any; };
 }
 /**
  * 
@@ -152,6 +122,12 @@ export interface CloseStatuses {
      * @memberof CloseStatuses
      */
     'statusJpName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'colorCode': string;
     /**
      * 
      * @type {Array<Closes>}
@@ -708,13 +684,13 @@ export class CheckInApi extends BaseAPI {
 export const CloseApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * パーキングエリアのリストを取得する
+         * パーキング道路のリストを取得する
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/close/pa-list`;
+        paRoadList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/close/pa-road-list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -844,15 +820,15 @@ export const CloseApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CloseApiAxiosParamCreator(configuration)
     return {
         /**
-         * パーキングエリアのリストを取得する
+         * パーキング道路のリストを取得する
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Parkings>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paList(options);
+        async paRoadList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ParkingRoads>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paRoadList(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CloseApi.paList']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CloseApi.paRoadList']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -874,7 +850,7 @@ export const CloseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async status(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CloseStatusList>>> {
+        async status(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CloseStatusLists>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.status(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CloseApi.status']?.[localVarOperationServerIndex]?.url;
@@ -903,13 +879,13 @@ export const CloseApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = CloseApiFp(configuration)
     return {
         /**
-         * パーキングエリアのリストを取得する
+         * パーキング道路のリストを取得する
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paList(options?: RawAxiosRequestConfig): AxiosPromise<Array<Parkings>> {
-            return localVarFp.paList(options).then((request) => request(axios, basePath));
+        paRoadList(options?: RawAxiosRequestConfig): AxiosPromise<Array<ParkingRoads>> {
+            return localVarFp.paRoadList(options).then((request) => request(axios, basePath));
         },
         /**
          * 閉鎖状況を投稿する
@@ -927,7 +903,7 @@ export const CloseApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        status(options?: RawAxiosRequestConfig): AxiosPromise<Array<CloseStatusList>> {
+        status(options?: RawAxiosRequestConfig): AxiosPromise<CloseStatusLists> {
             return localVarFp.status(options).then((request) => request(axios, basePath));
         },
         /**
@@ -950,14 +926,14 @@ export const CloseApiFactory = function (configuration?: Configuration, basePath
  */
 export class CloseApi extends BaseAPI {
     /**
-     * パーキングエリアのリストを取得する
+     * パーキング道路のリストを取得する
      * @summary 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CloseApi
      */
-    public paList(options?: RawAxiosRequestConfig) {
-        return CloseApiFp(this.configuration).paList(options).then((request) => request(this.axios, this.basePath));
+    public paRoadList(options?: RawAxiosRequestConfig) {
+        return CloseApiFp(this.configuration).paRoadList(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

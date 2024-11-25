@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CloseRepository } from 'src/db/Close/close.repository';
 import { ParkingRepository } from 'src/db/Parking/parking.repository';
-import { ClosePostRequest } from './dto/close.dto';
+import { ClosePostRequest, CloseStatusLists } from './dto/close.dto';
 import { CloseStatusRepository } from 'src/db/CloseStatus/closeStatus.repository';
 import { UserRepository } from 'src/db/User/user.repository';
 import { ParkingRoadRepository } from 'src/db/ParkingRoads/ParkingRoad.repository';
@@ -10,12 +10,9 @@ import {
   DateUtilService,
   TIMEFORMAT,
 } from 'src/util/dateUtil/dateUtil.service';
-import { DataSource, MoreThan, QueryBuilder } from 'typeorm';
-import dayjs from 'dayjs';
-import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
-import { Parkings } from 'src/db/Parking/parking.entity';
 import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
 import { CloseStatusList } from './dto/close.dto';
+import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 
 @Injectable()
 export class CloseService {
@@ -28,18 +25,33 @@ export class CloseService {
     private readonly dateUtil: DateUtilService,
   ) {}
 
-  async paList(): Promise<Parkings[]> {
-    return this.parkingRepository.find({
+  /**
+   * パーキング道路を取得する
+   * @returns パーキング道路リスト
+   */
+  async paRoadList(): Promise<ParkingRoads[]> {
+    return this.parkingRoadRepository.find({
       relations: {
-        parkingRoads: true,
+        parking: true,
       },
     });
   }
 
+  /**
+   * クローズステータスの凡例を取得する
+   * @returns クローズステータスの凡例
+   */
   async statusList(): Promise<CloseStatuses[]> {
-    return this.closeStatusRepository.find();
+    return this.closeStatusRepository.find({
+      order: { id: 'ASC' },
+    });
   }
 
+  /**
+   * 閉鎖状況を投稿する
+   * @param input リクエスト
+   * @returns 投稿結果の閉鎖状況
+   */
   async post(input: ClosePostRequest): Promise<Closes> {
     const closeStatus = await this.closeStatusRepository.findOne({
       where: { id: input.closeStatusId },
@@ -57,11 +69,15 @@ export class CloseService {
     });
   }
 
-  async status(): Promise<CloseStatusList[]> {
+  /**
+   * 閉鎖状況を取得する
+   * @returns 集計された閉鎖状況
+   */
+  async status(): Promise<CloseStatusLists> {
     const sixHoursAgo = this.dateUtil.getTimeBeforeNow(6, 'hour');
     const sixHoursAgoStr = sixHoursAgo.format();
-    console.log(sixHoursAgoStr);
 
+    // パーキング道路に紐づくユーザごとに最新の投稿を取得
     const parkingRoadClose = await this.parkingRoadRepository
       .createQueryBuilder('parkingRoad')
       .leftJoinAndSelect('parkingRoad.parking', 'parking')
@@ -75,17 +91,18 @@ export class CloseService {
           WHERE subClose."parkingRoadId" = close."parkingRoadId"
           AND subClose."userId" = close."userId"
         )`,
-        // `close.updatedAt > :sixHoursAgo
-        // AND close.updatedAt = (
-        // ${this.closeRepository
-        //   .createQueryBuilder()
-        //   .select('MAX(subClose.updatedAt)', 'maxUpdatedAt')
-        //   .from(Closes, 'subClose')
-        //   .where('subClose.parkingRoadId = parkingRoad.close.parkingRoadId')
-        //   .andWhere('subClose.userId = parkingRoad.close.userId')
-        //   .getQuery()}
-        // )
-        //   `,
+        { sixHoursAgo: sixHoursAgoStr },
+      )
+      .leftJoinAndSelect(
+        'parkingRoad.checkIns',
+        'checkIn',
+        `checkIn.updatedAt > :sixHoursAgo
+        AND checkIn.updatedAt = (
+          SELECT MAX(subCheckIn."updatedAt")
+          FROM "check_ins" subCheckIn
+          WHERE subCheckIn."parkingRoadId" = "checkIn"."parkingRoadId"
+          AND subCheckIn."userId" = "checkIn"."userId"
+        )`,
         { sixHoursAgo: sixHoursAgoStr },
       )
       .leftJoinAndSelect('close.user', 'user')
@@ -93,16 +110,31 @@ export class CloseService {
       .orderBy('parkingRoad.id', 'ASC')
       .getMany();
 
-    // console.log(parkingRoadClose);
-    //sixHoursAgo
+    // const parkingRoadCheckin = await this.parkingRoadRepository
+    //   .createQueryBuilder('parkingRoad')
+    //   .leftJoinAndSelect('parkingRoad.parking', 'parking')
+    //   .leftJoinAndSelect(
+    //     'parkingRoad.checkIns',
+    //     'checkIn',
+    //     `checkIn.updatedAt > :sixHoursAgo
+    //     AND checkIn.updatedAt = (
+    //       SELECT MAX(subCheckIn."updatedAt")
+    //       FROM "check_ins" subCheckIn
+    //       WHERE subCheckIn."parkingRoadId" = "checkIn"."parkingRoadId"
+    //       AND subCheckIn."userId" = "checkIn"."userId"
+    //     )`,
+    //     { sixHoursAgo: sixHoursAgoStr },
+    //   )
+    //   .leftJoinAndSelect('checkIn.user', 'user')
+    //   .orderBy('parkingRoad.id', 'ASC')
+    //   .getMany();
 
+    // 10分ごとの時間リストを作成
     let time = sixHoursAgo
       .minute(Math.ceil(sixHoursAgo.minute() / 10) * 10)
       .second(0)
       .millisecond(0);
-
     const timeList = [];
-
     const now = this.dateUtil.getNowDayJs();
 
     while (time.isBefore(now)) {
@@ -113,6 +145,7 @@ export class CloseService {
       time = time.add(10, 'minute');
     }
 
+    // 集計ひな形のオブジェクトを作成
     const statusKeys = (await this.closeStatusRepository.find()).map(
       (status) => {
         return status.status;
@@ -123,7 +156,8 @@ export class CloseService {
       closeStatusRaw[status] = 0;
     }
 
-    const closeStatusList: CloseStatusList[] = [];
+    // 集計を実施
+    const closeStatusList: { [key: number]: CloseStatusList } = {};
     for (const road of parkingRoadClose) {
       const roadData: CloseStatusList = {
         parkingId: road.parking.id,
@@ -133,6 +167,7 @@ export class CloseService {
         closeStatusSplitTime: {},
         last30MinuteStatus: JSON.parse(JSON.stringify(closeStatusRaw)),
       };
+
       for (const time of timeList) {
         roadData.closeStatusSplitTime[
           time.from.format(TIMEFORMAT.timeDisplay)
@@ -152,9 +187,24 @@ export class CloseService {
           roadData.last30MinuteStatus[close.closeStatus.status]++;
         }
       }
-      closeStatusList.push(roadData);
+
+      for (const checkIn of road.checkIns) {
+        const updatedAt = this.dateUtil.getDayJs(checkIn.updatedAt);
+        for (const time of timeList) {
+          if (updatedAt.isAfter(time.from) && updatedAt.isBefore(time.to)) {
+            roadData.closeStatusSplitTime[
+              time.from.format(TIMEFORMAT.timeDisplay)
+            ]['check_in']++;
+          }
+        }
+        if (this.dateUtil.getTimeBeforeNow(30, 'minute').isBefore(updatedAt)) {
+          roadData.last30MinuteStatus['check_in']++;
+        }
+      }
+
+      closeStatusList[road.id] = roadData;
     }
 
-    return closeStatusList;
+    return { list: closeStatusList };
   }
 }

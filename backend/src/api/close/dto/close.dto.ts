@@ -91,3 +91,12 @@ export class CloseStatusList {
     [statusName: string]: number;
   };
 }
+
+export class CloseStatusLists {
+  @ApiProperty({
+    description: '閉鎖状況のリスト',
+    type: Object,
+    additionalProperties: true,
+  })
+  list: { [key: number]: CloseStatusList };
+}

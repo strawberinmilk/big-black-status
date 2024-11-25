@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { closeApi } from "../api/api";
-import { CloseStatuses, CloseStatusList, Parkings } from "../api/generated";
+import {
+  CloseStatuses,
+  CloseStatusLists,
+  ParkingRoads,
+} from "../api/generated";
 
 import {
   ArcElement,
@@ -15,34 +19,31 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { MenuItem, Select } from "@mui/material";
 
 export const CloseListComponent = () => {
-  const [paList, setPaList] = useState<Parkings[]>([]);
+  const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);
-  const [closeStatusList, setCloseStatusList] = useState<CloseStatusList[]>();
-
-  const [currentPA, setCurrentPA] = useState<number>(0);
+  const [closeStatusList, setCloseStatusList] = useState<CloseStatusLists>();
+  const [currentPaRoadId, setCurrentPaRoadId] = useState<number>(1);
   const [pieData, setPieData] = useState<ChartData<"pie", number[], unknown>>();
-
-  // console.log(closeStatusList?.[0].last30MinuteStatus);
-  // console.log(statusList);
 
   ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
   // 初回情報取得
   useEffect(() => {
-    // PAリスト
-    closeApi.paList().then((res) => {
-      setPaList(res.data);
+    // PA道路リスト
+    closeApi.paRoadList().then((res) => {
+      setPaRoadList(res.data);
     });
     // ステータスリスト
     closeApi.statusList().then((res) => {
       setStatusList(res.data);
     });
-    // 過去30分の投稿リスト
+    // 投稿リスト
     closeApi.status().then((res) => {
       setCloseStatusList(res.data);
     });
   }, []);
 
+  // 閲覧中のPA道路又は投稿情報が変更された場合に再描画
   useEffect(() => {
     if (!closeStatusList) return;
     setPieData({
@@ -50,55 +51,74 @@ export const CloseListComponent = () => {
       datasets: [
         {
           label: "投稿数",
+          backgroundColor: statusList.map((status) => status.colorCode),
           data: statusList.map(
             (status) =>
               (
-                closeStatusList[currentPA].last30MinuteStatus as Record<
-                  string,
-                  number
-                >
+                closeStatusList.list[currentPaRoadId]
+                  .last30MinuteStatus as Record<string, number>
               )[status.status]
           ),
-          backgroundColor: ["green", "yellow", "pink", "red"],
-          borderColor: ["green", "yellow", "pink", "red"],
-          borderWidth: 1,
         },
       ],
     });
-  }, [closeStatusList, currentPA]);
+  }, [closeStatusList, currentPaRoadId, statusList]);
 
   return (
     <>
       <h3>PAごとの閉鎖状況</h3>
 
+      <h5>パーキングを選択</h5>
       <Select
-        // value={paList}
         label="PA"
-        onChange={(e) => (setCurrentPA(e.target.value as number))}
+        value={currentPaRoadId}
+        onChange={(e) => setCurrentPaRoadId(e.target.value as number)}
       >
-        {paList.map((pa) => (
+        {paRoadList.map((pa) => (
           <MenuItem key={pa.id} value={pa.id}>
-            {pa.name}
+            {pa.parking.name}&nbsp;{pa.name}
           </MenuItem>
         ))}
       </Select>
 
-      {pieData && (
+      {pieData && closeStatusList&& (
         <>
+          <h5>過去30分間の投稿数</h5>
           <Pie
             data={pieData}
             options={{
               plugins: {
                 datalabels: {
                   formatter: (value: number, ctx: any) => {
-                    return ctx.dataset.data[ctx.dataIndex]
-                      ? ctx.chart.data.labels?.[ctx.dataIndex]
-                      : "";
+                    return value ? ctx.chart.data.labels?.[ctx.dataIndex] : "";
                   },
                 },
               },
             }}
           />
+          <table>
+            <thead>
+              <tr>
+                <th>ステータス</th>
+                <th>投稿数</th>
+              </tr>
+            </thead>
+            <tbody>
+              {statusList.map((status) => (
+                <tr key={status.id}>
+                  <td>{status.statusJpName}</td>
+                  <td>
+                    {
+                      (
+                        closeStatusList.list[currentPaRoadId]
+                          .last30MinuteStatus as Record<string, number>
+                      )[status.status]
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       )}
     </>

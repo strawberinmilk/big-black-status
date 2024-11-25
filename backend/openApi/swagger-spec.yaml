@@ -70,21 +70,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/Users'
       tags: *ref_0
-  /api/close/pa-list:
+  /api/close/pa-road-list:
     get:
-      operationId: pa-list
+      operationId: pa-road-list
       summary: ''
-      description: パーキングエリアのリストを取得する
+      description: パーキング道路のリストを取得する
       parameters: []
       responses:
         '200':
-          description: パーキングエリアのリスト
+          description: パーキング道路のリスト
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Parkings'
+                  $ref: '#/components/schemas/ParkingRoads'
       tags: &ref_1
         - close
   /api/close/status-list:
@@ -135,9 +135,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CloseStatusList'
+                $ref: '#/components/schemas/CloseStatusLists'
       tags: *ref_1
 info:
   title: Cats example
@@ -176,6 +174,9 @@ components:
         statusJpName:
           type: string
           example: 閉鎖
+        colorCode:
+          type: string
+          example: '#FF00FF'
         close:
           type: array
           items:
@@ -190,6 +191,7 @@ components:
         - id
         - status
         - statusJpName
+        - colorCode
         - close
         - createdAt
         - updatedAt
@@ -409,46 +411,12 @@ components:
         - parkingRoadId
         - closeStatusId
         - userId
-    CloseStatusList:
+    CloseStatusLists:
       type: object
       properties:
-        parkingId:
-          type: number
-          description: パーキングID
-          example: 1
-        parkingName:
-          type: number
-          description: パーキング名
-          example: 1
-        parkingRoadId:
-          type: number
-          description: パーキング道路ID
-          example: 1
-        parkingRoadName:
-          type: number
-          description: パーキング道路名
-          example: 1
-        closeStatusSplitTime:
+        list:
           type: object
-          description: 閉鎖ステータスID
-          example:
-            '23:00':
-              open: 1
-              display_clear: 0
-              close_display: 2
-              close_real: 1
-        last30MinuteStatus:
-          type: object
-          description: 30分間の投稿数
-          example:
-            open: 1
-            display_clear: 0
-            close_display: 2
-            close_real: 1
+          description: 閉鎖状況のリスト
+          additionalProperties: true
       required:
-        - parkingId
-        - parkingName
-        - parkingRoadId
-        - parkingRoadName
-        - closeStatusSplitTime
-        - last30MinuteStatus
+        - list

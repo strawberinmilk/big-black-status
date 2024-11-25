@@ -1,29 +1,28 @@
 import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { CloseService } from './close.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Parkings } from 'src/db/Parking/parking.entity';
-import { ClosePostRequest } from './dto/close.dto';
+import { ClosePostRequest, CloseStatusLists } from './dto/close.dto';
 import { Closes } from 'src/db/Close/close.entity';
 import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
-import { CloseStatusList } from './dto/close.dto';
+import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
 
 @ApiTags('close')
 @Controller('api/close')
 export class CloseController {
   constructor(private readonly closeService: CloseService) {}
 
-  @Get('pa-list')
+  @Get('pa-road-list')
   @ApiOperation({
-    operationId: 'pa-list',
-    description: 'パーキングエリアのリストを取得する',
+    operationId: 'pa-road-list',
+    description: 'パーキング道路のリストを取得する',
   })
   @ApiResponse({
     status: 200,
-    description: 'パーキングエリアのリスト',
-    type: [Parkings],
+    description: 'パーキング道路のリスト',
+    type: [ParkingRoads],
   })
-  async paList(): Promise<Parkings[]> {
-    return await this.closeService.paList();
+  async paRoadList(): Promise<ParkingRoads[]> {
+    return await this.closeService.paRoadList();
   }
 
   @Get('status-list')
@@ -62,9 +61,9 @@ export class CloseController {
   @ApiResponse({
     status: 200,
     description: '閉鎖状況を取得する',
-    type: [CloseStatusList],
+    type: CloseStatusLists,
   })
-  async status(): Promise<CloseStatusList[]> {
+  async status(): Promise<CloseStatusLists> {
     return await this.closeService.status();
   }
 }

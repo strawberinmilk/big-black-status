@@ -7,8 +7,9 @@ export default function App() {
     <>
       <SnackGComponent>
         <BrowserRouter>
-          <Link to="/">Home</Link>
-          <Link to="/timeline">TimeLine</Link>
+          <Link to="/">トップページ</Link><br />
+          <Link to="/close">閉鎖状況</Link><br />
+          <Link to="/timeline">タイムライン</Link><br />
           <Routes>
             {routes.map((route) => (
               <Route

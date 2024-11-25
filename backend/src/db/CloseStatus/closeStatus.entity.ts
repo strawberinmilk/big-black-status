@@ -30,6 +30,10 @@ export class CloseStatuses {
   @ApiProperty({ example: '閉鎖' })
   statusJpName: string;
 
+  @Column('varchar', { comment: 'グラフ色', default: '#FF00FF' })
+  @ApiProperty({ example: '#FF00FF' })
+  colorCode: string;
+
   @OneToMany(() => Closes, (close) => close.closeStatus)
   @ApiProperty({ type: () => Closes, isArray: true })
   close?: Closes[];
