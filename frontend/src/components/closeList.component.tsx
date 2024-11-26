@@ -10,10 +10,14 @@ import {
   ArcElement,
   ChartData,
   Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
   Legend,
   Tooltip,
+  PointElement,
+  LineElement,
 } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { Line, Pie } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { MenuItem, Select } from "@mui/material";
@@ -24,8 +28,19 @@ export const CloseListComponent = () => {
   const [closeStatusList, setCloseStatusList] = useState<CloseStatusLists>();
   const [currentPaRoadId, setCurrentPaRoadId] = useState<number>(1);
   const [pieData, setPieData] = useState<ChartData<"pie", number[], unknown>>();
+  const [lineData, setLineData] =
+    useState<ChartData<"line", number[], unknown>>();
 
-  ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+  ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    ChartDataLabels,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement
+  );
 
   // 初回情報取得
   useEffect(() => {
@@ -62,6 +77,23 @@ export const CloseListComponent = () => {
         },
       ],
     });
+
+    const every10 = closeStatusList.list[currentPaRoadId].every10MinuteStatus;
+    const lineDataSets = Object.keys(every10).map((status) => {
+      return {
+        label: status,
+        lineTension: 0,
+        borderColor: statusList.find((s) => s.status === status)?.colorCode,
+        backgroundColor: statusList.find((s) => s.status === status)?.colorCode,
+        data: Object.keys(every10[status]).map((timeKey) => {
+          return every10[status][timeKey];
+        }),
+      };
+    });
+    setLineData({
+      labels: closeStatusList.list[currentPaRoadId].lineLabels,
+      datasets: lineDataSets,
+    });
   }, [closeStatusList, currentPaRoadId, statusList]);
 
   return (
@@ -81,7 +113,7 @@ export const CloseListComponent = () => {
         ))}
       </Select>
 
-      {pieData && closeStatusList&& (
+      {pieData && closeStatusList && (
         <>
           <h5>過去30分間の投稿数</h5>
           <Pie
@@ -90,7 +122,7 @@ export const CloseListComponent = () => {
               plugins: {
                 datalabels: {
                   formatter: (value: number, ctx: any) => {
-                    return value ? ctx.chart.data.labels?.[ctx.dataIndex] : "";
+                    return value ? `${ctx.chart.data.labels?.[ctx.dataIndex]}\n${value}件` : "";
                   },
                 },
               },
@@ -120,6 +152,22 @@ export const CloseListComponent = () => {
             </tbody>
           </table>
         </>
+      )}
+
+      <h5>過去6時間の推移</h5>
+      {lineData && (
+        <Line
+          data={lineData}
+          options={{
+            plugins: {
+              datalabels: {
+                formatter: () => {
+                  return "";
+                },
+              },
+            },
+          }}
+        />
       )}
     </>
   );

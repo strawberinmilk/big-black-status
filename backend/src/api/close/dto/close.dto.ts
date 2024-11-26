@@ -60,21 +60,15 @@ export class CloseStatusList {
   parkingRoadName: string;
 
   @ApiProperty({
-    type: Object,
-    description: '閉鎖ステータスID',
-    example: {
-      '23:00': {
-        open: 1,
-        display_clear: 0,
-        close_display: 2,
-        close_real: 1,
-      },
-    },
+    type: [String],
+    description: '折れ線グラフラベル',
+    example: 1,
   })
-  closeStatusSplitTime: {
-    [from: string]: {
-      [statusName: string]: number;
-    };
+  lineLabels: string[];
+
+  @ApiProperty({})
+  every10MinuteStatus: {
+    [statusName: string]: { [time: string]: number };
   };
 
   @ApiProperty({

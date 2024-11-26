@@ -81,28 +81,40 @@ export class CloseService {
     const parkingRoadClose = await this.parkingRoadRepository
       .createQueryBuilder('parkingRoad')
       .leftJoinAndSelect('parkingRoad.parking', 'parking')
+      // .leftJoinAndSelect(
+      //   'parkingRoad.closes',
+      //   'close',
+      //   `close.updatedAt > :sixHoursAgo
+      //   AND close.updatedAt = (
+      //     SELECT MAX(subClose."updatedAt")
+      //     FROM closes subClose
+      //     WHERE subClose."parkingRoadId" = close."parkingRoadId"
+      //     AND subClose."userId" = close."userId"
+      //   )`,
+      //   { sixHoursAgo: sixHoursAgoStr },
+      // )
       .leftJoinAndSelect(
         'parkingRoad.closes',
         'close',
-        `close.updatedAt > :sixHoursAgo
-        AND close.updatedAt = (
-          SELECT MAX(subClose."updatedAt")
-          FROM closes subClose
-          WHERE subClose."parkingRoadId" = close."parkingRoadId"
-          AND subClose."userId" = close."userId"
-        )`,
+        'close.updatedAt > :sixHoursAgo',
         { sixHoursAgo: sixHoursAgoStr },
       )
+      // .leftJoinAndSelect(
+      //   'parkingRoad.checkIns',
+      //   'checkIn',
+      //   `checkIn.updatedAt > :sixHoursAgo
+      //   AND checkIn.updatedAt = (
+      //     SELECT MAX(subCheckIn."updatedAt")
+      //     FROM "check_ins" subCheckIn
+      //     WHERE subCheckIn."parkingRoadId" = "checkIn"."parkingRoadId"
+      //     AND subCheckIn."userId" = "checkIn"."userId"
+      //   )`,
+      //   { sixHoursAgo: sixHoursAgoStr },
+      // )
       .leftJoinAndSelect(
         'parkingRoad.checkIns',
         'checkIn',
-        `checkIn.updatedAt > :sixHoursAgo
-        AND checkIn.updatedAt = (
-          SELECT MAX(subCheckIn."updatedAt")
-          FROM "check_ins" subCheckIn
-          WHERE subCheckIn."parkingRoadId" = "checkIn"."parkingRoadId"
-          AND subCheckIn."userId" = "checkIn"."userId"
-        )`,
+        'checkIn.updatedAt > :sixHoursAgo',
         { sixHoursAgo: sixHoursAgoStr },
       )
       .leftJoinAndSelect('close.user', 'user')
@@ -110,77 +122,64 @@ export class CloseService {
       .orderBy('parkingRoad.id', 'ASC')
       .getMany();
 
-    // const parkingRoadCheckin = await this.parkingRoadRepository
-    //   .createQueryBuilder('parkingRoad')
-    //   .leftJoinAndSelect('parkingRoad.parking', 'parking')
-    //   .leftJoinAndSelect(
-    //     'parkingRoad.checkIns',
-    //     'checkIn',
-    //     `checkIn.updatedAt > :sixHoursAgo
-    //     AND checkIn.updatedAt = (
-    //       SELECT MAX(subCheckIn."updatedAt")
-    //       FROM "check_ins" subCheckIn
-    //       WHERE subCheckIn."parkingRoadId" = "checkIn"."parkingRoadId"
-    //       AND subCheckIn."userId" = "checkIn"."userId"
-    //     )`,
-    //     { sixHoursAgo: sixHoursAgoStr },
-    //   )
-    //   .leftJoinAndSelect('checkIn.user', 'user')
-    //   .orderBy('parkingRoad.id', 'ASC')
-    //   .getMany();
-
     // 10分ごとの時間リストを作成
     let time = sixHoursAgo
       .minute(Math.ceil(sixHoursAgo.minute() / 10) * 10)
       .second(0)
       .millisecond(0);
     const timeList = [];
+    const lineLabels = [];
     const now = this.dateUtil.getNowDayJs();
-
     while (time.isBefore(now)) {
       timeList.push({
         from: time,
         to: time.add(9, 'minute').add(59, 'second').add(999, 'millisecond'),
       });
+      lineLabels.push(time.format(TIMEFORMAT.timeDisplay));
       time = time.add(10, 'minute');
     }
 
     // 集計ひな形のオブジェクトを作成
-    const statusKeys = (await this.closeStatusRepository.find()).map(
-      (status) => {
-        return status.status;
-      },
-    );
-    const closeStatusRaw = {};
+    const last30MinuteStatusRaw = {};
+    const closeStatuses = await this.closeStatusRepository.find();
+    const statusKeys = closeStatuses.map((status) => {
+      return status.status;
+    });
     for (const status of statusKeys) {
-      closeStatusRaw[status] = 0;
+      last30MinuteStatusRaw[status] = 0;
+    }
+    const every10MinuteStatusRaw = {};
+    for (const closeStatus of [...closeStatuses, { status: 'check_in' }]) {
+      every10MinuteStatusRaw[closeStatus.status] = {};
+      for (const time of timeList) {
+        every10MinuteStatusRaw[closeStatus.status][
+          time.from.format(TIMEFORMAT.timeDisplay)
+        ] = 0;
+      }
     }
 
     // 集計を実施
     const closeStatusList: { [key: number]: CloseStatusList } = {};
     for (const road of parkingRoadClose) {
+      // 集計データを作成
       const roadData: CloseStatusList = {
         parkingId: road.parking.id,
         parkingName: road.parking.name,
         parkingRoadId: road.id,
         parkingRoadName: road.name,
-        closeStatusSplitTime: {},
-        last30MinuteStatus: JSON.parse(JSON.stringify(closeStatusRaw)),
+        lineLabels,
+        last30MinuteStatus: JSON.parse(JSON.stringify(last30MinuteStatusRaw)),
+        every10MinuteStatus: JSON.parse(JSON.stringify(every10MinuteStatusRaw)),
       };
 
-      for (const time of timeList) {
-        roadData.closeStatusSplitTime[
-          time.from.format(TIMEFORMAT.timeDisplay)
-        ] = JSON.parse(JSON.stringify(closeStatusRaw));
-      }
-
+      // 閉鎖状況の集計
       for (const close of road.closes) {
         const updatedAt = this.dateUtil.getDayJs(close.updatedAt);
         for (const time of timeList) {
           if (updatedAt.isAfter(time.from) && updatedAt.isBefore(time.to)) {
-            roadData.closeStatusSplitTime[
+            roadData.every10MinuteStatus[close.closeStatus.status][
               time.from.format(TIMEFORMAT.timeDisplay)
-            ][close.closeStatus.status]++;
+            ]++;
           }
         }
         if (this.dateUtil.getTimeBeforeNow(30, 'minute').isBefore(updatedAt)) {
@@ -188,23 +187,22 @@ export class CloseService {
         }
       }
 
+      // チェックインの集計
       for (const checkIn of road.checkIns) {
         const updatedAt = this.dateUtil.getDayJs(checkIn.updatedAt);
         for (const time of timeList) {
           if (updatedAt.isAfter(time.from) && updatedAt.isBefore(time.to)) {
-            roadData.closeStatusSplitTime[
+            roadData.every10MinuteStatus['check_in'][
               time.from.format(TIMEFORMAT.timeDisplay)
-            ]['check_in']++;
+            ]++;
           }
         }
         if (this.dateUtil.getTimeBeforeNow(30, 'minute').isBefore(updatedAt)) {
           roadData.last30MinuteStatus['check_in']++;
         }
       }
-
       closeStatusList[road.id] = roadData;
     }
-
     return { list: closeStatusList };
   }
 }
