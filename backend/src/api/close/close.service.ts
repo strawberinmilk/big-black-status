@@ -149,7 +149,7 @@ export class CloseService {
       last30MinuteStatusRaw[status] = 0;
     }
     const every10MinuteStatusRaw = {};
-    for (const closeStatus of [...closeStatuses, { status: 'check_in' }]) {
+    for (const closeStatus of [{ status: 'check_in' }, ...closeStatuses]) {
       every10MinuteStatusRaw[closeStatus.status] = {};
       for (const time of timeList) {
         every10MinuteStatusRaw[closeStatus.status][

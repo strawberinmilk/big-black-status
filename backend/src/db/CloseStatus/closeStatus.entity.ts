@@ -34,6 +34,10 @@ export class CloseStatuses {
   @ApiProperty({ example: '#FF00FF' })
   colorCode: string;
 
+  @Column('varchar', { comment: 'グループ', default: 'please_set' })
+  @ApiProperty({ example: 'close' })
+  group: string;
+
   @OneToMany(() => Closes, (close) => close.closeStatus)
   @ApiProperty({ type: () => Closes, isArray: true })
   close?: Closes[];

@@ -177,6 +177,9 @@ components:
         colorCode:
           type: string
           example: '#FF00FF'
+        group:
+          type: string
+          example: close
         close:
           type: array
           items:
@@ -192,6 +195,7 @@ components:
         - status
         - statusJpName
         - colorCode
+        - group
         - close
         - createdAt
         - updatedAt

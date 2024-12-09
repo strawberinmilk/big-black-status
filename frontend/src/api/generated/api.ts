@@ -130,6 +130,12 @@ export interface CloseStatuses {
     'colorCode': string;
     /**
      * 
+     * @type {string}
+     * @memberof CloseStatuses
+     */
+    'group': string;
+    /**
+     * 
      * @type {Array<Closes>}
      * @memberof CloseStatuses
      */
