@@ -21,7 +21,8 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { MenuItem, Select } from "@mui/material";
+import { Button, MenuItem, Select } from "@mui/material";
+import { ModalGComponent } from "../common/modal.gcomponent";
 
 export const CloseListComponent = () => {
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
@@ -30,6 +31,15 @@ export const CloseListComponent = () => {
   const [currentPaRoadId, setCurrentPaRoadId] = useState<number>(1);
   const [pieData, setPieData] = useState<ChartData<"pie", number[], unknown>>();
   const [barData, setBarData] = useState<ChartData<"bar", number[], unknown>>();
+  const [postModalIsOpen, setPostModalIsOpen] = useState<boolean>(false);
+
+  const postModalOpen = () => {
+    setPostModalIsOpen(true);
+  };
+
+  const postModalClose = () => {
+    setPostModalIsOpen(false);
+  };
 
   ChartJS.register(
     ArcElement,
@@ -98,22 +108,25 @@ export const CloseListComponent = () => {
     });
   }, [closeStatusList, currentPaRoadId, statusList]);
 
+  const SelectPa = (<Select
+    label="PA"
+    value={currentPaRoadId}
+    onChange={(e) => setCurrentPaRoadId(e.target.value as number)}
+  >
+    {paRoadList.map((pa) => (
+      <MenuItem key={pa.id} value={pa.id}>
+        {pa.parking.name}&nbsp;{pa.name}
+      </MenuItem>
+    ))}
+  </Select>);
+
   return (
     <>
+      <Button onClick={postModalOpen}>投稿する</Button>
       <h3>PAごとの閉鎖状況</h3>
 
       <h5>パーキングを選択</h5>
-      <Select
-        label="PA"
-        value={currentPaRoadId}
-        onChange={(e) => setCurrentPaRoadId(e.target.value as number)}
-      >
-        {paRoadList.map((pa) => (
-          <MenuItem key={pa.id} value={pa.id}>
-            {pa.parking.name}&nbsp;{pa.name}
-          </MenuItem>
-        ))}
-      </Select>
+      {SelectPa}
 
       {pieData && closeStatusList && (
         <>
@@ -177,12 +190,34 @@ export const CloseListComponent = () => {
                 },
               },
               responsive: true,
-              scales: {
-              },
+              scales: {},
             }}
           />
         </div>
       )}
+
+      <ModalGComponent
+        isOpen={postModalIsOpen}
+        onClose={postModalClose}
+      >
+        <h3>閉鎖状況を投稿する</h3>
+        {SelectPa}
+        {statusList.map((status) => (
+          <Button
+            key={status.id}
+            onClick={() => {
+              closeApi.post({
+                parkingRoadId: currentPaRoadId,
+                closeStatusId: status.id,
+                userId: 1,
+              });
+              postModalClose();
+            }}
+          >
+            {status.statusJpName}
+          </Button>
+        ))}
+      </ModalGComponent>
     </>
   );
 };
