@@ -17,7 +17,7 @@ export const ModalGComponent = (props: Props) => {
             className={style.modalBox}
             style={{
               height: props.height || "70vh",
-              width: props.width || "70vw",
+              width: props.width || "70%",
             }}
             onClick={(e) => e.stopPropagation()}
           >

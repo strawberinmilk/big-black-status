@@ -16,7 +16,9 @@ export const SnackContext = createContext({
   isOpen: false,
   type: "",
   message: "",
-  setSnack: (snack: Snack) => {},
+  setSnack: (snack: Snack) => {
+    console.log(snack);
+  },
 });
 
 export const SnackGComponent = (props: { children: React.ReactNode }) => {

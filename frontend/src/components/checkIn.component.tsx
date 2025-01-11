@@ -101,7 +101,7 @@ export const CheckInComponents = () => {
 
   return (
     <>
-      <h1>チェックイン</h1>
+      <h3>チェックイン</h3>
       {currentParking ? (
         <h2>現在地のパーキング: {currentParking.name}</h2>
       ) : (

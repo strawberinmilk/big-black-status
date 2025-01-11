@@ -1,0 +1,23 @@
+@use "../constants.scss";
+
+body {
+  min-height: 100vh;
+  min-width: 100%;
+  font-family: constants.$FONT_BODY;
+  overflow-x: hidden;
+}
+
+.root {
+  min-height: 100vh;
+  min-width: 95vw;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.contents {
+  margin: 0 auto;
+  width: calc(95vw - ((constants.$WIDTH_SIDE_BAR + 10px ) * 2));
+  @media (max-width: 1150px) {
+    width: 95vw;
+  }
+}

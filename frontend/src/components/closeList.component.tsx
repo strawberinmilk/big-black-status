@@ -122,8 +122,8 @@ export const CloseListComponent = () => {
 
   return (
     <>
-      <Button onClick={postModalOpen}>投稿する</Button>
       <h3>PAごとの閉鎖状況</h3>
+      <Button onClick={postModalOpen}>投稿する</Button>
 
       <h5>パーキングを選択</h5>
       {SelectPa}
@@ -174,10 +174,10 @@ export const CloseListComponent = () => {
       <h5>過去6時間の推移</h5>
       {barData && (
         <div
-          style={{
-            width: "1000px",
-            height: "500px",
-          }}
+          // style={{
+          //   width: "1000px",
+          //   height: "500px",
+          // }}
         >
           <Bar
             data={barData}

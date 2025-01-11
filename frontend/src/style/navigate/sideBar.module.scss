@@ -1,0 +1,41 @@
+@use "../constants.scss";
+
+.pc {
+  height: 100vh;
+  width: constants.$WIDTH_SIDE_BAR;
+  position: fixed;
+}
+
+.mobile {
+  height: 35px;
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+}
+
+.mobileHeader {
+  height: 35px;
+  width: 100vw;
+  position: fixed;
+  background-color: constants.$COLOR_SITE_HEADER;
+  svg {
+    position: absolute;
+  }
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit-transform: translateY(-50%) translateX(-50%);
+  }
+}
+
+.title_pc {
+  font-family: constants.$FONT_TITLE;
+  text-align: center;
+  background: radial-gradient(ellipse at center, constants.$COLOR_SITE_HEADER, #FFFFFF);
+}
+
+.title_mobile {
+  font-family: constants.$FONT_TITLE;
+}
