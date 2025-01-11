@@ -1,4 +1,4 @@
-import style from "../style/gComponent/modal.module.scss";
+import style from "../style/common/modal.module.scss";
 
 type Props = {
   isOpen: boolean;

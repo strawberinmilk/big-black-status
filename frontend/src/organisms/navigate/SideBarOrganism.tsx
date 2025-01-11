@@ -1,4 +1,4 @@
-import style from "../../style/navigate/sideBar.module.scss";
+import style from "../../style/organisms/navigate/sideBar.module.scss";
 import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import List from "@mui/material/List";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const pcMinWidth = 1150;
 const title = "Big Black Status";
 
-export const SideBarComponent = () => {
+export const SideBarOrganism = () => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);

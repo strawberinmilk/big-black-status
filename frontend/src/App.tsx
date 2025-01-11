@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { routes } from "./router/router";
-import { SnackGComponent } from "./common/snack.gcomponent";
-import { SideBarComponent } from "./components/navigate/sidebar.component";
-import style from "./style/navigate/app.module.scss";
+import { SnackGComponent } from "./common/SnackComponent";
+import { SideBarOrganism } from "./organisms/navigate/SideBarOrganism";
+import style from "./style/app.module.scss";
 
 export default function App() {
   return (
     <div className={style.root}>
       <SnackGComponent>
         <BrowserRouter>
-          <SideBarComponent/>
+          <SideBarOrganism />
           <div className={style.contents}>
             <Routes>
               {routes.map((route) => (

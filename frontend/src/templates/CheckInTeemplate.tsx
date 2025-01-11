@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import { checkInApi } from "../api/api";
 import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../api/generated";
-import { SnackContext } from "../common/snack.gcomponent";
+import { SnackContext } from "../common/SnackComponent";
 
-export const CheckInComponents = () => {
+export const CheckInTemplate = () => {
   const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
 
   const { setSnack } = useContext(SnackContext);

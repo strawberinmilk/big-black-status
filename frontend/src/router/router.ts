@@ -1,6 +1,6 @@
-import { HomePage } from "../pages/home.page";
-import { ClosePage } from "../pages/close.page";
-import { TimelinePage } from "../pages/timeline.page";
+import { HomePage } from "../pages/HomePage";
+import { ClosePage } from "../pages/ClosePage";
+import { TimelinePage } from "../pages/TimelinePage";
 
 export const routes = [
   {

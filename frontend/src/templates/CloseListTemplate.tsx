@@ -22,9 +22,9 @@ import { Bar, Pie } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Button, MenuItem, Select } from "@mui/material";
-import { ModalGComponent } from "../common/modal.gcomponent";
+import { ModalGComponent } from "../common/ModalComponent";
 
-export const CloseListComponent = () => {
+export const CloseListTemplate = () => {
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);
   const [closeStatusList, setCloseStatusList] = useState<CloseStatusLists>();
@@ -108,17 +108,19 @@ export const CloseListComponent = () => {
     });
   }, [closeStatusList, currentPaRoadId, statusList]);
 
-  const SelectPa = (<Select
-    label="PA"
-    value={currentPaRoadId}
-    onChange={(e) => setCurrentPaRoadId(e.target.value as number)}
-  >
-    {paRoadList.map((pa) => (
-      <MenuItem key={pa.id} value={pa.id}>
-        {pa.parking.name}&nbsp;{pa.name}
-      </MenuItem>
-    ))}
-  </Select>);
+  const SelectPa = (
+    <Select
+      label="PA"
+      value={currentPaRoadId}
+      onChange={(e) => setCurrentPaRoadId(e.target.value as number)}
+    >
+      {paRoadList.map((pa) => (
+        <MenuItem key={pa.id} value={pa.id}>
+          {pa.parking.name}&nbsp;{pa.name}
+        </MenuItem>
+      ))}
+    </Select>
+  );
 
   return (
     <>
@@ -174,10 +176,10 @@ export const CloseListComponent = () => {
       <h5>過去6時間の推移</h5>
       {barData && (
         <div
-          // style={{
-          //   width: "1000px",
-          //   height: "500px",
-          // }}
+        // style={{
+        //   width: "1000px",
+        //   height: "500px",
+        // }}
         >
           <Bar
             data={barData}
@@ -196,10 +198,7 @@ export const CloseListComponent = () => {
         </div>
       )}
 
-      <ModalGComponent
-        isOpen={postModalIsOpen}
-        onClose={postModalClose}
-      >
+      <ModalGComponent isOpen={postModalIsOpen} onClose={postModalClose}>
         <h3>閉鎖状況を投稿する</h3>
         {SelectPa}
         {statusList.map((status) => (
