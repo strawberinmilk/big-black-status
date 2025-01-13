@@ -1,0 +1,14 @@
+.title {
+  position: relative;
+  text-align: center;
+  font-size: 2em;
+  padding: 0.25em 0;
+}
+
+.title:after {
+  content: "";
+  display: block;
+  height: 4px;
+  background: -webkit-linear-gradient(to right, #e65a5a, transparent);
+  background: linear-gradient(to right, #e65a5a, transparent);
+}

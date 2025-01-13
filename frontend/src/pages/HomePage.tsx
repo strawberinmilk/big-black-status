@@ -1,9 +1,9 @@
-import { CheckInTemplate } from "../templates/CheckInTeemplate";
+import { HomeTemplate } from "../templates/HomeTemplate";
 
 export const HomePage = () => {
   return (
     <>
-      <CheckInTemplate />
+      <HomeTemplate />
     </>
   );
 };

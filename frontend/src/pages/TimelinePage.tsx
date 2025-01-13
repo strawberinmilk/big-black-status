@@ -1,7 +1,9 @@
+import { TimeLineTemplate } from "../templates/TimeLineTemplate"
+
 export const TimelinePage = () => {
   return (
     <>
-      <h3>TimeLine</h3>
+      <TimeLineTemplate />
     </>
   )
 }

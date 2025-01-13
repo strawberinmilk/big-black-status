@@ -3,6 +3,9 @@ import { checkInApi } from "../api/api";
 import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../api/generated";
 import { SnackContext } from "../common/SnackComponent";
+import { TitleMolecule } from "../molecules/TitleMolecule";
+import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
+import style from "../style/templates/checkIn.module.scss";
 
 export const CheckInTemplate = () => {
   const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
@@ -101,34 +104,43 @@ export const CheckInTemplate = () => {
 
   return (
     <>
-      <h3>チェックイン</h3>
+      <TitleMolecule title="チェックイン" />
       {currentParking ? (
-        <h2>現在地のパーキング: {currentParking.name}</h2>
+        <p>
+          <span className={style.currentParking}>
+            現在地のパーキング: {currentParking.name}
+          </span>
+        </p>
       ) : (
         <>
           <p>パーキングエリアにいません</p>
-          <Button onClick={async () => getCurrentParking()}>
+          <Button variant="contained" onClick={async () => getCurrentParking()}>
             位置情報をリロード
           </Button>
         </>
       )}
-      {!currentRoad && (
+      {currentParking?.parkingRoads?.length && (
         <>
           {currentParking?.parkingRoads?.length === 1 ? (
+            // 大黒など上下共通の場合
             <></>
           ) : (
-            <h3>チェックインする路線を選択してください</h3>
+            // 大井など上下別の場合
+            <>
+              <SubTitleMolecule title="チェックインする路線を選択してください" />
+            </>
           )}
           {currentParking?.parkingRoads?.map((road) => {
             return (
               <Button
+                variant="contained"
                 onClick={async () => {
                   await checkIn(road.id);
                 }}
               >
                 {currentParking?.parkingRoads?.length === 1
                   ? "チェックインする"
-                  : road.name}
+                  : `${road.name}にチェックインする`}
               </Button>
             );
           })}
@@ -136,40 +148,20 @@ export const CheckInTemplate = () => {
       )}
       {currentRoad && currentParking && (
         <>
+          <SubTitleMolecule title="チェックイン完了" />
           <p>
             現在地は{currentParking.name} {currentRoad.name}です。
           </p>
-          <h5>このパーキングには下記のユーザがいます</h5>
+          <h3>このパーキングには下記のユーザがいます</h3>
           {hereUsers.length ? (
             hereUsers.map((user) => <p>{user.name}</p>)
           ) : (
             <p>誰もいないようです</p>
           )}
           <p>TODO: Twitter(現𝕏)にも投稿</p>
-          <p>TODO: タイムラインへの導線</p>
+          {/* TODO: タイムラインへの導線 */}
         </>
       )}
-      <br />
-      <br />
-      <br />
-      デバッグ用 ユーザID選択
-      <Button onClick={() => setUserId(1)}>1</Button>
-      <Button onClick={() => setUserId(2)}>2</Button>
-      <Button onClick={() => setUserId(3)}>3</Button>
-      <br />
-      <br />
-      <br />
-      <Button
-        onClick={() => {
-          setSnack({
-            isOpen: true,
-            type: "success",
-            message: "チェックインしました",
-          });
-        }}
-      >
-        currentParking
-      </Button>
     </>
   );
 };

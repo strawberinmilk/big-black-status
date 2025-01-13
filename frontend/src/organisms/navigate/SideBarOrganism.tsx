@@ -54,6 +54,11 @@ export const SideBarOrganism = () => {
           </ListItemButton>
         </ListItem>
         <ListItem>
+          <ListItemButton onClick={() => navigate("/checkin")}>
+            <ListItemText primary="チェックイン" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
           <ListItemButton onClick={() => navigate("/close")}>
             <ListItemText primary="閉鎖状況" />
           </ListItemButton>

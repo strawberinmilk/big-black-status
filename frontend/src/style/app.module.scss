@@ -5,6 +5,8 @@ body {
   min-width: 100%;
   font-family: constants.$FONT_BODY;
   overflow-x: hidden;
+  background-color: #001122;
+  color: #ffffff;
 }
 
 .root {
@@ -16,7 +18,7 @@ body {
 
 .contents {
   margin: 0 auto;
-  width: calc(95vw - ((constants.$WIDTH_SIDE_BAR + 10px ) * 2));
+  width: calc(95vw - ((constants.$WIDTH_SIDE_BAR + 20px ) * 2));
   @media (max-width: 1150px) {
     width: 95vw;
   }
