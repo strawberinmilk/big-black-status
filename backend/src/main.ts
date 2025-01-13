@@ -10,10 +10,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // CORS
-  console.log(configService.get<string>('FRONTEND_URL'));
   app.enableCors({
     origin: [configService.get<string>('FRONTEND_URL')],
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+    allowedHeaders:
+      'Origin, X-Requested-With, Content-Type, Accept, Ngrok-Skip-Browser-Warning',
   });
 
   // OpenAPI
