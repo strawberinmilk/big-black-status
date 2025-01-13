@@ -28,6 +28,7 @@ import { ModalGComponent } from "../common/ModalComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
 import { SnackContext } from "../common/SnackComponent";
+import { CLOSE_DISPLAY, HAKO_SHIBA_TATSU_ROAD_ID } from "../common/constants";
 
 export const CloseListTemplate = () => {
   const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
@@ -247,6 +248,38 @@ export const CloseListTemplate = () => {
               </Button>
             );
           })}
+        </div>
+        <div>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              try {
+                Promise.all(
+                  HAKO_SHIBA_TATSU_ROAD_ID.map(async (roadId) => {
+                    await closeApi.post({
+                      parkingRoadId: roadId,
+                      closeStatusId: CLOSE_DISPLAY,
+                      userId,
+                    });
+                  })
+                );
+
+                setSnack({
+                  isOpen: true,
+                  type: "success",
+                  message: "投稿しました",
+                });
+              } catch {
+                setSnack({
+                  isOpen: true,
+                  type: "error",
+                  message: "投稿に失敗しました",
+                });
+              }
+            }}
+          >
+            箱崎辰巳芝浦閉鎖表示
+          </Button>
         </div>
         <p>
           既にPAにいる場合はチェックイン機能をご利用ください。確度の高い情報として扱われます。
