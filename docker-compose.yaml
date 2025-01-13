@@ -46,6 +46,7 @@ services:
       driver: json-file
     environment:
       VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+      VITE_GOOGLE_ANALYTICS_ID: ${VITE_GOOGLE_ANALYTICS_ID}
       NODE_ENV: development
       TZ: UTC
 

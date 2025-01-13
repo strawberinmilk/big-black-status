@@ -108,7 +108,7 @@ export const SideBarOrganism = () => {
               handleClose();
             }}
           >
-            <ListItemText primary="サイトマップ" />
+            <ListItemText primary="その他" />
           </ListItemButton>
         </ListItem>
       </List>
