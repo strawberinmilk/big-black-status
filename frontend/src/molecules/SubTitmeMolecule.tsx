@@ -6,6 +6,6 @@ type Props = {
 
 export const SubTitleMolecule = ({title}: Props) => {
   return <>
-    <h3 className={style.subTitle}>{title}</h3>
+    <h2 className={style.subTitle}>{title}</h2>
   </>
 }
