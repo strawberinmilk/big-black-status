@@ -31,7 +31,7 @@ import { SnackContext } from "../common/SnackComponent";
 import { CLOSE_DISPLAY, HAKO_SHIBA_TATSU_ROAD_ID } from "../common/constants";
 
 export const CloseListTemplate = () => {
-  const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
+  const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
 
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);

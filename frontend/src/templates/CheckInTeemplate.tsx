@@ -8,7 +8,7 @@ import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
 import style from "../style/templates/checkIn.module.scss";
 
 export const CheckInTemplate = () => {
-  const [userId, setUserId] = useState<number>(1); // TODO: ユーザ機能実装後修正
+  const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
 
   const { setSnack } = useContext(SnackContext);
 

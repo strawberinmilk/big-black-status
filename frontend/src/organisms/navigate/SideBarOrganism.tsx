@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import { Drawer, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ModalGComponent } from "../../common/ModalComponent";
 
 const pcMinWidth = 1150;
 const title = "Big Black Status";
@@ -16,6 +17,7 @@ export const SideBarOrganism = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPc, setIsPc] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
+  const [siteMapOpen, setSiteMapOpen] = useState(false);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -26,6 +28,42 @@ export const SideBarOrganism = () => {
       setIsOpen(false);
     }
   };
+
+  const handleSiteMapOpen = () => {
+    setSiteMapOpen(true);
+  };
+  const handleSiteMapClose = () => {
+    setSiteMapOpen(false);
+  };
+
+  const pageListMain = [
+    {
+      path: "/",
+      name: "トップページ",
+    },
+    {
+      path: "/close",
+      name: "閉鎖状況",
+    },
+    {
+      path: "/checkin",
+      name: "チェックイン",
+    },
+    {
+      path: "/timeline",
+      name: "タイムライン",
+    },
+  ];
+  const pageListSub = [
+    {
+      path: "/welcome",
+      name: "初心者ガイド",
+    },
+    {
+      path: "",
+      name: "",
+    },
+  ];
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -48,24 +86,29 @@ export const SideBarOrganism = () => {
     <>
       {isPc && <h3 className={style.title_pc}>{title}</h3>}
       <List>
+        {pageListMain.map((page) => {
+          return (
+            <ListItem key={page.path}>
+              <ListItemButton
+                onClick={() => {
+                  navigate(page.path);
+                  handleClose();
+                }}
+              >
+                <ListItemText primary={page.name} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+
         <ListItem>
-          <ListItemButton onClick={() => navigate("/")}>
-            <ListItemText primary="トップページ" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={() => navigate("/checkin")}>
-            <ListItemText primary="チェックイン" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={() => navigate("/close")}>
-            <ListItemText primary="閉鎖状況" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={() => navigate("/timeline")}>
-            <ListItemText primary="タイムライン" />
+          <ListItemButton
+            onClick={() => {
+              handleSiteMapOpen();
+              handleClose();
+            }}
+          >
+            <ListItemText primary="サイトマップ" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -73,27 +116,47 @@ export const SideBarOrganism = () => {
   );
 
   return (
-    <nav className={isPc ? style.pc : style.mobile}>
-      {/* PC向け常時表示ナビゲーションバー */}
-      {isPc && Navigation}
-      {/* モバイル向け常時表示開閉ボタン */}
-      {!isPc && !isOpen && (
-        <div className={style.mobileHeader}>
-          <MenuIcon fontSize="large" onClick={handleOpen} />
-          <span className={style.title_mobile}>{title}</span>
-        </div>
-      )}
-      {/* モバイル向け全画面ナビゲーションバー */}
-      {!isPc && (
-        <Drawer open={isOpen} onClose={handleClose} onClick={handleClose}>
-          {Navigation}
-        </Drawer>
-      )}
-      {/* {!isPc && isOpen && (
+    <>
+      <nav className={isPc ? style.pc : style.mobile}>
+        {/* PC向け常時表示ナビゲーションバー */}
+        {isPc && Navigation}
+        {/* モバイル向け常時表示開閉ボタン */}
+        {!isPc && !isOpen && (
+          <div className={style.mobileHeader}>
+            <MenuIcon fontSize="large" onClick={handleOpen} />
+            <span className={style.title_mobile}>{title}</span>
+          </div>
+        )}
+        {/* モバイル向け全画面ナビゲーションバー */}
+        {!isPc && (
+          <Drawer open={isOpen} onClose={handleClose}>
+            {Navigation}
+          </Drawer>
+        )}
+        {/* {!isPc && isOpen && (
         <ModalGComponent isOpen={isOpen} onClose={handleClose}>
           {Navigation}
         </ModalGComponent>
       )} */}
-    </nav>
+      </nav>
+      <ModalGComponent isOpen={siteMapOpen} onClose={handleSiteMapClose}>
+        <List>
+          {pageListSub.map((page) => {
+            return (
+              <ListItem key={page.path}>
+                <ListItemButton
+                  onClick={() => {
+                    navigate(page.path);
+                    handleSiteMapClose();
+                  }}
+                >
+                  <ListItemText primary={page.name} />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
+        </List>
+      </ModalGComponent>
+    </>
   );
 };
