@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { WelcomeTemplate } from "../templates/WelcomeTemplate";
+import { WelcomeTemplate } from "../../templates/other/WelcomeTemplate";
 
 export const WelcomePage = () => {
   return (

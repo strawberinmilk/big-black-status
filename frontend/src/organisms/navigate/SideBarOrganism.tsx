@@ -60,9 +60,17 @@ export const SideBarOrganism = () => {
       name: "初心者ガイド",
     },
     {
-      path: "",
-      name: "",
+      path: "/operator-info",
+      name: "運営者プロフィール",
     },
+    {
+      path: "/privacy-policy",
+      name: "プライバシーポリシー",
+    },
+    {
+      path: "/contact",
+      name: "お問い合わせ",
+    }
   ];
 
   useEffect(() => {

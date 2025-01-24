@@ -1,0 +1,21 @@
+.imgTableArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 450px) {
+    flex-flow: column;
+  }
+
+  div {
+    width: 50%;
+    @media (max-width: 450px) {
+      width: 100%;
+    }
+    img{
+      width: 100%;
+    }
+    table {
+      margin: 0 auto;
+    }
+  }
+}

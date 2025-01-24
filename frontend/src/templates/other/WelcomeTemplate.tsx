@@ -1,5 +1,5 @@
-import { TitleMolecule } from "../molecules/TitleMolecule";
-import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
+import { TitleMolecule } from "../../molecules/TitleMolecule";
+import { SubTitleMolecule } from "../../molecules/SubTitmeMolecule";
 
 export const WelcomeTemplate = () => {
   return (
@@ -89,10 +89,16 @@ export const WelcomeTemplate = () => {
         将来の機能拡充でPAに立ち寄った回数のランキングなどを作る予定でいます。
       </p>
       <p>メニューからチェックインを選択し、ページを遷移します。</p>
-      <p>位置情報の利用許可を求めますので、この機能を利用する場合は許可を押下してください。</p>
-      <p>PAにいることが確認できれば次の画面に遷移します。PAにいるのに画面が変わらない場合はリロードを試してください。</p>
+      <p>
+        位置情報の利用許可を求めますので、この機能を利用する場合は許可を押下してください。
+      </p>
+      <p>
+        PAにいることが確認できれば次の画面に遷移します。PAにいるのに画面が変わらない場合はリロードを試してください。
+      </p>
       <p>方面別のPAは正しい方面を選択しチェックインを行います。</p>
-      <p>チェックインに成功すると2時間以内にチェックインしたユーザが表示されます。もし知り合いがいれば声を掛けに行きましょう！</p>
+      <p>
+        チェックインに成功すると2時間以内にチェックインしたユーザが表示されます。もし知り合いがいれば声を掛けに行きましょう！
+      </p>
     </>
   );
 };
