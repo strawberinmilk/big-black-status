@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CloseRepository } from 'src/db/Close/close.repository';
 import { ParkingRepository } from 'src/db/Parking/parking.repository';
 import { ClosePostRequest, CloseStatusLists } from './dto/close.dto';

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Backdrop, Button, CircularProgress } from "@mui/material";
 import { checkInApi } from "../api/api";
 import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../api/generated";
@@ -9,7 +9,8 @@ import style from "../style/templates/checkIn.module.scss";
 import { AxiosError } from "axios";
 
 export const CheckInTemplate = () => {
-  const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
+  const [userId /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
+  const [circleProgressOpen, setCircleProgressOpen] = useState(false);
 
   const { setSnack } = useContext(SnackContext);
 
@@ -43,6 +44,7 @@ export const CheckInTemplate = () => {
 
   // 現在地のパーキングを取得
   const getCurrentParking = async () => {
+    setCircleProgressOpen(true);
     const position = await getLocation();
     if (!position) return;
     await checkInApi
@@ -54,14 +56,20 @@ export const CheckInTemplate = () => {
           type: "error",
           message: "パーキングエリアが取得できませんでした",
         });
+        setCircleProgressOpen(false);
       });
+    setCircleProgressOpen(false);
     return position;
   };
 
   // チェックイン
   const checkIn = async (roadId: number) => {
+    setCircleProgressOpen(true);
     const position = await getCurrentParking();
-    if (!position) return;
+    if (!position) {
+      setCircleProgressOpen(false);
+      return;
+    }
 
     await checkInApi
       .checkIn({ userId, roadId, ...position })
@@ -74,14 +82,16 @@ export const CheckInTemplate = () => {
         setCurrentParking(res.data.parking);
         setCurrentRoad(res.data);
         await getUserHere(res.data.id);
+        setCircleProgressOpen(false);
       })
-      .catch((e: AxiosError) =>
+      .catch((e: AxiosError) => {
         setSnack({
           isOpen: true,
           type: "error",
           message: (e.response?.data as any).message,
-        })
-      );
+        });
+        setCircleProgressOpen(false);
+      });
   };
 
   // チェックイン後パーキングにいるユーザを取得
@@ -163,6 +173,12 @@ export const CheckInTemplate = () => {
           {/* TODO: タイムラインへの導線 */}
         </>
       )}
+
+      <Backdrop
+        open={circleProgressOpen}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };
