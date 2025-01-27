@@ -6,6 +6,7 @@ import { WelcomePage } from "../pages/other/WelcomePage";
 import { OperatorInfoPage } from "../pages/other/OperatorInfomationPage";
 import { PrivacyPolicyPage } from "../pages/other/PrivacyPolicyPage";
 import { ContactPage } from "../pages/other/ContactPage";
+import { notFoundPage } from "../pages/other/NotFoundPage";
 
 export const routes = [
   {
@@ -41,4 +42,8 @@ export const routes = [
     path: "/contact",
     Component: ContactPage,
   },
+  {
+    path: "*",
+    Component: notFoundPage,
+  }
 ];
