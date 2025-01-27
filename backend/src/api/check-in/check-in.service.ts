@@ -69,6 +69,7 @@ export class CheckInService {
             .format(TIMEFORMAT.timestamp),
         ),
       },
+      order: { createdAt: 'DESC' },
       relations: {
         parkingRoad: true,
       },

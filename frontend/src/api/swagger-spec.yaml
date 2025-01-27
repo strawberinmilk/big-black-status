@@ -137,6 +137,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/CloseStatusLists'
       tags: *ref_1
+  /api/contact:
+    post:
+      operationId: create
+      summary: ''
+      description: お問合せ
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
+      responses:
+        '200':
+          description: 問合せが成功したか
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contacts'
+      tags:
+        - contact
 info:
   title: Cats example
   description: The cats API description
@@ -199,6 +220,31 @@ components:
         - close
         - createdAt
         - updatedAt
+    Contacts:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+          description: Primary key
+        user:
+          $ref: '#/components/schemas/Users'
+        message:
+          type: string
+          example: 問い合わせ内容
+          description: 問い合わせ内容
+        createdAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2024-10-01T00:00:00.000Z'
+      required:
+        - id
+        - user
+        - message
+        - createdAt
+        - updatedAt
     Users:
       type: object
       properties:
@@ -231,6 +277,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Closes'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contacts'
       required:
         - id
         - screenName
@@ -241,6 +291,7 @@ components:
         - updatedAt
         - checkIns
         - close
+        - contacts
     Closes:
       type: object
       properties:
@@ -424,3 +475,16 @@ components:
           additionalProperties: true
       required:
         - list
+    CreateContactRequest:
+      type: object
+      properties:
+        userId:
+          type: number
+          description: ユーザID
+          example: 1
+        message:
+          type: string
+          description: 問い合わせ内容
+          example: お問い合わせの内容をここに記入してください。
+      required:
+        - message

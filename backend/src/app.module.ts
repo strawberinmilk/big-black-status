@@ -12,6 +12,8 @@ import { DateUtilModule } from './util/dateUtil/dateUtil.module';
 import { Closes } from './db/Close/close.entity';
 import { CloseStatuses } from './db/CloseStatus/closeStatus.entity';
 import { CloseModule } from './api/close/close.module';
+import { ContactModule } from './api/contact/contact.module';
+import { Contacts } from './db/Contact/contact.entity';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { CloseModule } from './api/close/close.module';
           ParkingRoads,
           Closes,
           CloseStatuses,
+          Contacts,
         ],
       }),
     }),
@@ -47,6 +50,7 @@ import { CloseModule } from './api/close/close.module';
       module: DateUtilModule,
     },
     CloseModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,6 +6,7 @@ import { SnackContext } from "../common/SnackComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
 import style from "../style/templates/checkIn.module.scss";
+import { AxiosError } from "axios";
 
 export const CheckInTemplate = () => {
   const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
@@ -74,11 +75,11 @@ export const CheckInTemplate = () => {
         setCurrentRoad(res.data);
         await getUserHere(res.data.id);
       })
-      .catch(() =>
+      .catch((e: AxiosError) =>
         setSnack({
           isOpen: true,
           type: "error",
-          message: "チェックインに失敗しました",
+          message: (e.response?.data as any).message,
         })
       );
   };

@@ -11,6 +11,7 @@ import {
 import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Closes } from '../Close/close.entity';
+import { Contacts } from '../Contact/contact.entity';
 
 @Unique(['id', 'screenName', 'email'])
 @Entity()
@@ -56,4 +57,8 @@ export class Users {
   @OneToMany(() => Closes, (close) => close.closeStatus)
   @ApiProperty({ type: () => Closes, isArray: true })
   close?: Closes[];
+
+  @OneToMany(() => Contacts, (contact) => contact.user)
+  @ApiProperty({ type: () => Contacts, isArray: true })
+  contacts?: Contacts[];
 }

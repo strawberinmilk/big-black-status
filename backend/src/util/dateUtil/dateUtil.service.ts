@@ -11,7 +11,7 @@ type TimeUnit = 'hour' | 'minute' | 'second';
 type DateTimeUnit = DateUnit | TimeUnit;
 
 export const TIMEFORMAT = {
-  timestamp: 'YYYY-MM-DD HH:mm:ss',
+  timestamp: 'YYYY-MM-DDTHH:mm:ss+09:00',
   date: 'YYYY/MM/DD',
   timeDisplay: 'HH:mm',
 };

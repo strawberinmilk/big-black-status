@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Configuration, CheckInApi, CloseApi } from "./generated";
+import { Configuration, CheckInApi, CloseApi, ContactApi } from "./generated";
 
 const config = new Configuration({
   basePath: import.meta.env.VITE_BACKEND_URL,
@@ -12,5 +12,5 @@ const axiosInstance = axios.create({
 });
 
 export const checkInApi = new CheckInApi(config, '', axiosInstance);
-
 export const closeApi = new CloseApi(config, '', axiosInstance)
+export const contactApi = new ContactApi(config, '', axiosInstance)
