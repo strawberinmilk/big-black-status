@@ -169,14 +169,30 @@ export const CheckInTemplate = () => {
           ) : (
             <p>誰もいないようです</p>
           )}
-          <p>TODO: Twitter(現𝕏)にも投稿</p>
+
+          <a
+            href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+            className="twitter-share-button"
+            data-size="large"
+            data-text={`現在地は${currentParking.name} ${currentRoad.name}です。`}
+            data-url={`${import.meta.env.VITE_FRONTEND_URL}`}
+            data-hashtags="BigBlackStatus"
+            data-lang="ja"
+            data-show-count="false"
+          >
+            Tweet
+          </a>
+          <script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charSet="utf-8"
+          ></script>
+
           {/* TODO: タイムラインへの導線 */}
         </>
       )}
 
-      <Backdrop
-        open={circleProgressOpen}
-      >
+      <Backdrop open={circleProgressOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

@@ -48,6 +48,31 @@ export const OperatorInfoTemplate = () => {
         Nest.js + TypeORM + OpenAPI + Postgres + React + mui
         で制作しております。
       </p>
+      <ul className={style.snsList}>
+        <li>
+          <a
+            href="https://twitter.com/strawberinmilk?ref_src=twsrc%5Etfw"
+            className="twitter-follow-button"
+            data-size="large"
+            data-show-count="false"
+          >
+            X(Twitter)
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/strawberinmilk">GitHub</a>
+        </li>
+        <li>
+          <a href="https://qiita.com/strawbeRinMilk">Qiita</a>
+        </li>
+      </ul>
+
+      <script
+        async
+        src="https://platform.twitter.com/widgets.js"
+        charSet="utf-8"
+      ></script>
+
       <SubTitleMolecule title="愛車紹介" />
       <div className={style.imgTableArea}>
         <div>
