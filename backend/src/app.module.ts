@@ -14,6 +14,7 @@ import { CloseStatuses } from './db/CloseStatus/closeStatus.entity';
 import { CloseModule } from './api/close/close.module';
 import { ContactModule } from './api/contact/contact.module';
 import { Contacts } from './db/Contact/contact.entity';
+import { MailModule } from './util/mail/mail.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { Contacts } from './db/Contact/contact.entity';
     },
     CloseModule,
     ContactModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
