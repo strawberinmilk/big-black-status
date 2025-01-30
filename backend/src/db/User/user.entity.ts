@@ -12,6 +12,7 @@ import { CheckIns } from '../CheckIn/checkIn.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Closes } from '../Close/close.entity';
 import { Contacts } from '../Contact/contact.entity';
+import { UserActive } from './user.dto';
 
 @Unique(['id', 'screenName', 'email'])
 @Entity()
@@ -41,6 +42,18 @@ export class Users {
   @Column('varchar', { comment: 'パスワード' })
   @ApiProperty({ example: 'password' })
   password: string;
+
+  @Column('varchar', { comment: '仮ユーザメールアドレス', nullable: true })
+  tmpEmail: string;
+
+  @Column('varchar', { comment: '仮ユーザトークン', nullable: true })
+  tmpToken: string;
+
+  @Column('int', { comment: '有効ユーザ', default: UserActive.TEMPORARY })
+  active: number;
+
+  @Column({ default: 1 })
+  role: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })

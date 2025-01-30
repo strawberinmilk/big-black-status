@@ -15,6 +15,7 @@ import { CloseModule } from './api/close/close.module';
 import { ContactModule } from './api/contact/contact.module';
 import { Contacts } from './db/Contact/contact.entity';
 import { MailModule } from './util/mail/mail.module';
+import { AuthModule } from './api/auth/auth.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { MailModule } from './util/mail/mail.module';
     CloseModule,
     ContactModule,
     MailModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
