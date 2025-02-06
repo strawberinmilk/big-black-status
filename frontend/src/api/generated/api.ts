@@ -26,6 +26,69 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface ActiveRequest
+ */
+export interface ActiveRequest {
+    /**
+     * アクティブトークン
+     * @type {string}
+     * @memberof ActiveRequest
+     */
+    'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthLoginRequest
+ */
+export interface AuthLoginRequest {
+    /**
+     * メールアドレス
+     * @type {string}
+     * @memberof AuthLoginRequest
+     */
+    'email': string;
+    /**
+     * パスワード
+     * @type {string}
+     * @memberof AuthLoginRequest
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthSignUpRequest
+ */
+export interface AuthSignUpRequest {
+    /**
+     * メールアドレス
+     * @type {string}
+     * @memberof AuthSignUpRequest
+     */
+    'email': string;
+    /**
+     * パスワード
+     * @type {string}
+     * @memberof AuthSignUpRequest
+     */
+    'password': string;
+    /**
+     * ハンドルネーム
+     * @type {string}
+     * @memberof AuthSignUpRequest
+     */
+    'name': string;
+    /**
+     * スクリーンネーム
+     * @type {string}
+     * @memberof AuthSignUpRequest
+     */
+    'screenName': string;
+}
+/**
+ * 
+ * @export
  * @interface CheckIns
  */
 export interface CheckIns {
@@ -287,6 +350,19 @@ export interface GetUserHereRequest {
 /**
  * 
  * @export
+ * @interface JwtToken
+ */
+export interface JwtToken {
+    /**
+     * JWTトークン
+     * @type {string}
+     * @memberof JwtToken
+     */
+    'access_token': string;
+}
+/**
+ * 
+ * @export
  * @interface ParkingRoads
  */
 export interface ParkingRoads {
@@ -492,6 +568,258 @@ export interface Users {
      */
     'contacts': Array<Contacts>;
 }
+
+/**
+ * AuthApi - axios parameter creator
+ * @export
+ */
+export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * サインイン後アドレス認証を行う
+         * @summary 
+         * @param {ActiveRequest} activeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        active: async (activeRequest: ActiveRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'activeRequest' is not null or undefined
+            assertParamExists('active', 'activeRequest', activeRequest)
+            const localVarPath = `/api/auth/active`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(activeRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * ログインする
+         * @summary 
+         * @param {AuthLoginRequest} authLoginRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login: async (authLoginRequest: AuthLoginRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authLoginRequest' is not null or undefined
+            assertParamExists('login', 'authLoginRequest', authLoginRequest)
+            const localVarPath = `/api/auth/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authLoginRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * サインアップする
+         * @summary 
+         * @param {AuthSignUpRequest} authSignUpRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        signup: async (authSignUpRequest: AuthSignUpRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authSignUpRequest' is not null or undefined
+            assertParamExists('signup', 'authSignUpRequest', authSignUpRequest)
+            const localVarPath = `/api/auth/signup`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authSignUpRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AuthApi - functional programming interface
+ * @export
+ */
+export const AuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * サインイン後アドレス認証を行う
+         * @summary 
+         * @param {ActiveRequest} activeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async active(activeRequest: ActiveRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtToken>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.active(activeRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.active']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * ログインする
+         * @summary 
+         * @param {AuthLoginRequest} authLoginRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async login(authLoginRequest: AuthLoginRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtToken>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(authLoginRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.login']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * サインアップする
+         * @summary 
+         * @param {AuthSignUpRequest} authSignUpRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async signup(authSignUpRequest: AuthSignUpRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signup(authSignUpRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.signup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AuthApi - factory interface
+ * @export
+ */
+export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthApiFp(configuration)
+    return {
+        /**
+         * サインイン後アドレス認証を行う
+         * @summary 
+         * @param {ActiveRequest} activeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        active(activeRequest: ActiveRequest, options?: RawAxiosRequestConfig): AxiosPromise<JwtToken> {
+            return localVarFp.active(activeRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * ログインする
+         * @summary 
+         * @param {AuthLoginRequest} authLoginRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login(authLoginRequest: AuthLoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<JwtToken> {
+            return localVarFp.login(authLoginRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * サインアップする
+         * @summary 
+         * @param {AuthSignUpRequest} authSignUpRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        signup(authSignUpRequest: AuthSignUpRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.signup(authSignUpRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AuthApi - object-oriented interface
+ * @export
+ * @class AuthApi
+ * @extends {BaseAPI}
+ */
+export class AuthApi extends BaseAPI {
+    /**
+     * サインイン後アドレス認証を行う
+     * @summary 
+     * @param {ActiveRequest} activeRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public active(activeRequest: ActiveRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).active(activeRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ログインする
+     * @summary 
+     * @param {AuthLoginRequest} authLoginRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public login(authLoginRequest: AuthLoginRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).login(authLoginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * サインアップする
+     * @summary 
+     * @param {AuthSignUpRequest} authSignUpRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public signup(authSignUpRequest: AuthSignUpRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).signup(authSignUpRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * CheckInApi - axios parameter creator

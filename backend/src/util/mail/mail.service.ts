@@ -33,11 +33,13 @@ export class MailService {
   };
 
   async sendMail(data: MailBody) {
+    console.log(this.OPTIONS);
     try {
-      const transporter = nodemailer.createTransport(this.OPTIONS);
-      return transporter.sendMail({ ...data, from: this.FROM_ADDRESS });
-    } catch {
-      return false;
+      const transporter = await nodemailer.createTransport(this.OPTIONS);
+      return await transporter.sendMail({ ...data, from: this.FROM_ADDRESS });
+    } catch (e) {
+      // メール送信失敗時の処理
+      throw e;
     }
   }
 }

@@ -1,9 +1,10 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { dump } from 'js-yaml';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [configService.get<string>('FRONTEND_URL')],
     allowedHeaders:
-      'Origin, X-Requested-With, Content-Type, Accept, Ngrok-Skip-Browser-Warning',
+      'Origin, X-Requested-With, Content-Type, Accept, Ngrok-Skip-Browser-Warning, authorization',
   });
 
   // OpenAPI
@@ -26,6 +27,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   fs.writeFileSync('./openApi/swagger-spec.yaml', dump(document, {}));
   // SwaggerModule.setup('api', app, document);
+
+  // Userの取得時秘匿情報を除外
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(3000);
 }

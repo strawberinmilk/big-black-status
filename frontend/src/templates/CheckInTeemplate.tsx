@@ -1,5 +1,5 @@
 import { Backdrop, Button, CircularProgress } from "@mui/material";
-import { checkInApi } from "../api/api";
+import { Api } from "../api/api";
 import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../api/generated";
 import { SnackContext } from "../common/SnackComponent";
@@ -9,6 +9,7 @@ import style from "../style/templates/checkIn.module.scss";
 import { AxiosError } from "axios";
 
 export const CheckInTemplate = () => {
+  const checkInApi = Api().checkInApi;
   const [userId /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
   const [circleProgressOpen, setCircleProgressOpen] = useState(false);
 

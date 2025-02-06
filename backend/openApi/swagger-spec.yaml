@@ -197,9 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LoginAuthGuard'
+                $ref: '#/components/schemas/JwtToken'
       tags: *ref_2
   /api/auth/active:
     post:
@@ -219,9 +217,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Users'
+                $ref: '#/components/schemas/JwtToken'
       tags: *ref_2
 info:
   title: Cats example
@@ -555,13 +551,57 @@ components:
         - message
     AuthSignUpRequest:
       type: object
-      properties: {}
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: hoge@example.com
+        password:
+          type: string
+          description: パスワード
+          example: fwe&3FD7Du2
+        name:
+          type: string
+          description: ハンドルネーム
+          example: name
+        screenName:
+          type: string
+          description: スクリーンネーム
+          example: screenname
+      required:
+        - email
+        - password
+        - name
+        - screenName
     AuthLoginRequest:
       type: object
-      properties: {}
-    LoginAuthGuard:
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: hoge@example.com
+        password:
+          type: string
+          description: パスワード
+          example: fwe&3FD7Du2
+      required:
+        - email
+        - password
+    JwtToken:
       type: object
-      properties: {}
+      properties:
+        access_token:
+          type: string
+          description: JWTトークン
+          example: eyJhbGciOiJIUzI1NiI...
+      required:
+        - access_token
     ActiveRequest:
       type: object
-      properties: {}
+      properties:
+        token:
+          type: string
+          description: アクティブトークン
+          example: a59989d4-2bbe-4371-ad27-b0c3ecbfc513
+      required:
+        - token

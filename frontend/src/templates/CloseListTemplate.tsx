@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { closeApi } from "../api/api";
+import { Api } from "../api/api";
 import {
   CloseStatuses,
   CloseStatusLists,
@@ -32,6 +32,8 @@ import { CLOSE_DISPLAY, HAKO_SHIBA_TATSU_ROAD_ID } from "../common/constants";
 
 export const CloseListTemplate = () => {
   const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
+
+  const { closeApi } = Api();
 
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);

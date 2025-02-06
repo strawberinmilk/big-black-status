@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, MoreThan, Repository } from 'typeorm';
 import { Users } from './user.entity';
-import { UserOmitPassword } from './user.dto';
 import * as bcrypt from 'bcryptjs';
+import { DateUtilService, TIMEFORMAT } from 'src/util/dateUtil/dateUtil.service';
 
 @Injectable()
 export class UserRepository extends Repository<Users> {
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private dataSource: DataSource,
+    private dateUtilService: DateUtilService,
+  ) {
     super(Users, dataSource.createEntityManager());
   }
 
@@ -18,10 +21,10 @@ export class UserRepository extends Repository<Users> {
     });
   }
 
-  async findByEmailAndPassSafePass(
+  async findByEmailAndPassword(
     email: string,
     rawPassword: string,
-  ): Promise<UserOmitPassword> {
+  ): Promise<Users | null> {
     const user = await this.findOne({
       where: {
         email,
@@ -33,25 +36,28 @@ export class UserRepository extends Repository<Users> {
     return user;
   }
 
-  async findByEmailSafePass(email: string): Promise<UserOmitPassword> {
+  async findByEmail(email: string): Promise<Users | null> {
     const user = await this.findOne({
       where: {
         email,
       },
     });
     if (!user) return null;
-    delete user.password;
     return user;
   }
 
-  async findByTokenSafePass(token: string): Promise<UserOmitPassword> {
+  async findByTmpToken(tmpToken: string): Promise<Users | null> {
     const user = await this.findOne({
       where: {
-        tmpToken: token,
+        tmpToken,
+        createdAt: MoreThan(
+          this.dateUtilService
+            .getTimeBeforeNow(1, 'hour')
+            .format(TIMEFORMAT.timestamp),
+        ),
       },
     });
     if (!user) return null;
-    delete user.password;
     return user;
   }
 }

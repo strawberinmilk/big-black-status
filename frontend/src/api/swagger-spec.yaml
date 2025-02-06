@@ -158,6 +158,67 @@ paths:
                 $ref: '#/components/schemas/Contacts'
       tags:
         - contact
+  /api/auth/signup:
+    post:
+      operationId: signup
+      summary: ''
+      description: サインアップする
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSignUpRequest'
+      responses:
+        '200':
+          description: サインアップ結果
+          content:
+            application/json:
+              schema:
+                type: string
+      tags: &ref_2
+        - auth
+  /api/auth/login:
+    post:
+      operationId: login
+      summary: ''
+      description: ログインする
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+      responses:
+        '200':
+          description: JWTトークン
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      tags: *ref_2
+  /api/auth/active:
+    post:
+      operationId: active
+      summary: ''
+      description: サインイン後アドレス認証を行う
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActiveRequest'
+      responses:
+        '200':
+          description: ユーザ情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      tags: *ref_2
 info:
   title: Cats example
   description: The cats API description
@@ -488,3 +549,59 @@ components:
           example: お問い合わせの内容をここに記入してください。
       required:
         - message
+    AuthSignUpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: hoge@example.com
+        password:
+          type: string
+          description: パスワード
+          example: fwe&3FD7Du2
+        name:
+          type: string
+          description: ハンドルネーム
+          example: name
+        screenName:
+          type: string
+          description: スクリーンネーム
+          example: screenname
+      required:
+        - email
+        - password
+        - name
+        - screenName
+    AuthLoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: hoge@example.com
+        password:
+          type: string
+          description: パスワード
+          example: fwe&3FD7Du2
+      required:
+        - email
+        - password
+    JwtToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWTトークン
+          example: eyJhbGciOiJIUzI1NiI...
+      required:
+        - access_token
+    ActiveRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          description: アクティブトークン
+          example: a59989d4-2bbe-4371-ad27-b0c3ecbfc513
+      required:
+        - token

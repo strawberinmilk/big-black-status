@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { contactApi } from "../api/api";
+import { Api } from "../api/api";
 import { useContext } from "react";
 import { SnackContext } from "../common/SnackComponent";
 
@@ -10,6 +10,8 @@ type ContactFormValue = {
 
 
 export default() => {
+  const contactApi = Api().contactApi;
+
   const form = useForm<ContactFormValue>()
   const { setSnack } = useContext(SnackContext);
 

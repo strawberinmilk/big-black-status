@@ -1,4 +1,4 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CheckInService } from './check-in.service';
 import {
   GetCurrentParkingRequest,
@@ -9,6 +9,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Parkings } from 'src/db/Parking/parking.entity';
 import { Users } from 'src/db/User/user.entity';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
+import { MemberAuthGuard } from 'src/guards/guard/member.guard';
 
 @ApiTags('check-in')
 @Controller('/api/check-in')

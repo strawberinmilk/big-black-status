@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -5,14 +6,23 @@ import {
   IsStrongPassword,
   MaxLength,
 } from 'class-validator';
-import { Users } from 'src/db/User/user.entity';
 
 class AuthBaseDto {
+  @ApiProperty({
+    type: String,
+    description: 'メールアドレス',
+    example: 'hoge@example.com',
+  })
   @IsString()
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({
+    type: String,
+    description: 'パスワード',
+    example: 'fwe&3FD7Du2',
+  })
   @IsString()
   @IsStrongPassword()
   @MaxLength(30)
@@ -21,11 +31,21 @@ class AuthBaseDto {
 }
 
 export class AuthSignUpRequest extends AuthBaseDto {
+  @ApiProperty({
+    type: String,
+    description: 'ハンドルネーム',
+    example: 'name',
+  })
   @IsString()
   @MaxLength(30)
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    type: String,
+    description: 'スクリーンネーム',
+    example: 'screenname',
+  })
   @IsString()
   @MaxLength(30)
   @IsNotEmpty()
@@ -35,9 +55,12 @@ export class AuthSignUpRequest extends AuthBaseDto {
 export class AuthLoginRequest extends AuthBaseDto {}
 
 export class ActiveRequest {
+  @ApiProperty({
+    type: String,
+    description: 'アクティブトークン',
+    example: 'a59989d4-2bbe-4371-ad27-b0c3ecbfc513',
+  })
   @IsString()
   @IsNotEmpty()
   token: string;
 }
-
-export type PasswordOmitUser = Omit<Users, 'hashedPassword'>;

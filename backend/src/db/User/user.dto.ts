@@ -12,8 +12,6 @@ export enum UserActive {
   ACTIVE = 1,
 }
 
-export type UserOmitPassword = Omit<Users, 'password'>;
-
 /* 
 export class BaseUserDto {
   email: string;

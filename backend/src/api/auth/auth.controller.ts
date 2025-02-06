@@ -10,12 +10,10 @@ import { AuthService } from './auth.service';
 import {
   AuthLoginRequest,
   AuthSignUpRequest,
-  PasswordOmitUser,
   ActiveRequest,
 } from './dto/auth.dto';
 import { JwtToken } from './dto/auth.type';
 import { LoginAuthGuard } from 'src/guards/guard/login.guard';
-import { UserOmitPassword } from 'src/db/User/user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Users } from 'src/db/User/user.entity';
 
@@ -48,12 +46,12 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'JWTトークン',
-    type: [LoginAuthGuard],
+    type: JwtToken,
   })
   @UseGuards(LoginAuthGuard)
   async login(
     @Body(new ValidationPipe()) input: AuthLoginRequest,
-    @Request() req: { user: PasswordOmitUser },
+    @Request() req: { user: Users },
   ): Promise<JwtToken> {
     return this.authService.login(req.user);
   }
@@ -66,11 +64,11 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'ユーザ情報',
-    type: [Users],
+    type: JwtToken,
   })
   async active(
     @Body(new ValidationPipe()) input: ActiveRequest,
-  ): Promise<UserOmitPassword> {
+  ): Promise</* Users */ JwtToken> {
     return this.authService.active(input);
   }
 }
