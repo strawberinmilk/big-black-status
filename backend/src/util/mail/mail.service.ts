@@ -3,8 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 
 export type MailBody = {
+  from?: string;
   to: string;
-  subject: string;
+  subject?: string;
   html: string;
 };
 
@@ -33,10 +34,14 @@ export class MailService {
   };
 
   async sendMail(data: MailBody) {
-    console.log(this.OPTIONS);
+    if (data.from) {
+      data.from = `${data.from} <${this.FROM_ADDRESS}>`;
+    } else {
+      data.from = this.FROM_ADDRESS;
+    }
     try {
       const transporter = await nodemailer.createTransport(this.OPTIONS);
-      return await transporter.sendMail({ ...data, from: this.FROM_ADDRESS });
+      return await transporter.sendMail({ ...data });
     } catch (e) {
       // メール送信失敗時の処理
       throw e;

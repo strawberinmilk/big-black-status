@@ -8,18 +8,18 @@ import {
   TextField,
 } from "@mui/material";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Form } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import LoginForm from "../../form/LoginForm";
 import { useCookies } from "react-cookie";
 
 export const AuthLoginTemplate = () => {
   const [cookie, , removeCookie] = useCookies(["jwt-token"]);
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const { form, method } = LoginForm();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const logout = () => {
     removeCookie("jwt-token");
@@ -28,10 +28,6 @@ export const AuthLoginTemplate = () => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  useEffect(() => {
-    (async () => {})();
-  }, []);
 
   return (
     <>
@@ -78,6 +74,7 @@ export const AuthLoginTemplate = () => {
             <br />
             <Button type="submit">ログイン</Button>
           </Form>
+          <Link to="/auth/signup">アカウントを新規作成</Link>
         </>
       )}
     </>

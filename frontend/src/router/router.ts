@@ -9,6 +9,7 @@ import { ContactPage } from "../pages/other/ContactPage";
 import { notFoundPage } from "../pages/other/NotFoundPage";
 import { AuthActivePage } from "../pages/auth/AuthActivePage";
 import { AuthLoginPage } from "../pages/auth/AuthLoginPage";
+import { AuthSignUpPage } from "../pages/auth/AuthSignUpPage";
 
 export const routes = [
   {
@@ -45,6 +46,7 @@ export const routes = [
     Component: ContactPage,
   },
   { path: "/auth/login", Component: AuthLoginPage },
+  { path: "/auth/signup", Component: AuthSignUpPage },
   { path: "/auth/active", Component: AuthActivePage },
   {
     path: "*",

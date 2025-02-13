@@ -44,6 +44,7 @@ export class AuthService {
 
     try {
       await this.mailService.sendMail({
+        from: 'BigBlackStatus',
         to: input.email,
         subject: 'アカウント有効化',
         html:

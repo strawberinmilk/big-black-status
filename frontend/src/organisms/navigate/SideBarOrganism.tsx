@@ -7,12 +7,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { Drawer, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ModalGComponent } from "../../common/ModalComponent";
+import { useCookies } from "react-cookie";
 
 const pcMinWidth = 1150;
 const title = "Big Black Status";
 
 export const SideBarOrganism = () => {
   const navigate = useNavigate();
+  const [cookie] = useCookies(["jwt-token"]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPc, setIsPc] = useState(false);
@@ -53,6 +55,15 @@ export const SideBarOrganism = () => {
       path: "/timeline",
       name: "タイムライン",
     },
+    cookie["jwt-token"]
+      ? {
+          path: "/auth/logout",
+          name: "ログアウト",
+        }
+      : {
+          path: "/auth/login",
+          name: "ログイン",
+        },
   ];
   const pageListSub = [
     {
@@ -70,7 +81,7 @@ export const SideBarOrganism = () => {
     {
       path: "/contact",
       name: "お問い合わせ",
-    }
+    },
   ];
 
   useEffect(() => {
