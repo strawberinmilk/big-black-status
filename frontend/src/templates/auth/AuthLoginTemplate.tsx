@@ -1,32 +1,19 @@
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
-import { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Form, Link } from "react-router-dom";
 import LoginForm from "../../form/LoginForm";
 import { useCookies } from "react-cookie";
+import { TextFieldMolecule } from "../../molecules/form/TextFieldMolecule";
+import { PasswordFieldMolecule } from "../../molecules/form/PasswordFieldMolecule";
+import { validateConfig } from "../../common/validates";
 
 export const AuthLoginTemplate = () => {
   const [cookie, , removeCookie] = useCookies(["jwt-token"]);
 
   const { form, method } = LoginForm();
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const logout = () => {
     removeCookie("jwt-token");
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
   };
 
   return (
@@ -40,37 +27,23 @@ export const AuthLoginTemplate = () => {
         <>
           <TitleMolecule title="ログイン" />
           <Form onSubmit={method.submit}>
-            <TextField
+            <TextFieldMolecule
               label="メールアドレス"
-              {...form.register("email", { required: true })}
+              form={form}
+              name="email"
+              validate={{
+                ...validateConfig.required,
+              }}
             />
             <br />
-            <FormControl>
-              <InputLabel htmlFor="outlined-adornment-password">
-                パスワード
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label={
-                        showPassword
-                          ? "hide the password"
-                          : "display the password"
-                      }
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-                {...form.register("password", { required: true })}
-              />
-            </FormControl>
+            <PasswordFieldMolecule
+              label="パスワード"
+              form={form}
+              name="password"
+              validate={{
+                ...validateConfig.required,
+              }}
+            />
             <br />
             <Button type="submit">ログイン</Button>
           </Form>

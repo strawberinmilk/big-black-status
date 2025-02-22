@@ -12,64 +12,58 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import SignUpForm from "../../form/SignUpForm";
+import { PasswordFieldMolecule } from "../../molecules/form/PasswordFieldMolecule";
+import { TextFieldMolecule } from "../../molecules/form/TextFieldMolecule";
+import { validateConfig } from "../../common/validates";
 
 export const AuthSignUpTemplate = () => {
   const { form, method } = SignUpForm();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   return (
     <>
       <TitleMolecule title="サインアップ" />
       <Form onSubmit={method.submit}>
-        <TextField
+        <TextFieldMolecule
           label="メールアドレス"
-          {...form.register("email", { required: true })}
+          form={form}
+          name="email"
+          validate={{
+            ...validateConfig.required,
+          }}
         />
         <br />
 
-        <FormControl>
-          <InputLabel htmlFor="outlined-adornment-password">
-            パスワード
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label={
-                    showPassword ? "hide the password" : "display the password"
-                  }
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            {...form.register("password", { required: true })}
-          />
-          <br />
+        <PasswordFieldMolecule
+          label="パスワード"
+          form={form}
+          name="password"
+          validate={{
+            ...validateConfig.required,
+          }}
+        />
+        <br />
 
-          <TextField
-            label="ID"
-            {...form.register("screenName", { required: true })}
-          />
-          <br />
 
-          <TextField
-            label="名前"
-            {...form.register("name", { required: true })}
-          />
-          <br />
-          <Button type="submit">アカウントを作成</Button>
-        </FormControl>
+        <TextFieldMolecule
+          label="ID"
+          form={form}
+          name="screenName"
+          validate={{
+            ...validateConfig.required,
+          }}
+        />
+        
+        <TextFieldMolecule
+          label="名前"
+          form={form}
+          name="name"
+          validate={{
+            ...validateConfig.required,
+          }}
+        />
+
+        <br />
+        <Button type="submit">アカウントを作成</Button>
       </Form>
     </>
   );
