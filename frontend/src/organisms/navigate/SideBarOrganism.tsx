@@ -57,7 +57,7 @@ export const SideBarOrganism = () => {
     },
     cookie["jwt-token"]
       ? {
-          path: "/auth/logout",
+          path: "/auth/login",
           name: "ログアウト",
         }
       : {

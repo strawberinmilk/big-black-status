@@ -5,6 +5,7 @@ import {
   UseGuards,
   ValidationPipe,
   Request,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -16,6 +17,7 @@ import { JwtToken } from './dto/auth.type';
 import { LoginAuthGuard } from 'src/guards/guard/login.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Users } from 'src/db/User/user.entity';
+import { MemberAuthGuard } from 'src/guards/guard/member.guard';
 
 @ApiTags('auth')
 @Controller('api/auth')
@@ -70,5 +72,21 @@ export class AuthController {
     @Body(new ValidationPipe()) input: ActiveRequest,
   ): Promise</* Users */ JwtToken> {
     return this.authService.active(input);
+  }
+
+  @Get('me')
+  @ApiOperation({
+    operationId: 'me',
+    description: 'ユーザ情報を取得する',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'ユーザ情報',
+    type: Users,
+  })
+  @UseGuards(MemberAuthGuard)
+  async me(@Request() req: { user: Users }): Promise<Users> {
+    console.log(req.user);
+    return req.user;
   }
 }

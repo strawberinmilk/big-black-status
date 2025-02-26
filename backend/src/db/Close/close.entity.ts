@@ -34,11 +34,11 @@ export class Closes {
   parkingRoad: ParkingRoads;
 
   @ManyToOne(() => Users, (user) => user.id, {
-    nullable: false,
+    nullable: true,
   })
   @JoinColumn({ name: 'userId' })
   @ApiProperty({ type: () => Users })
-  user: Users;
+  user?: Users;
 
   @CreateDateColumn({ type: 'timestamptz' })
   @ApiProperty({ example: '2024-10-01T00:00:00.000Z' })

@@ -1,17 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateContactRequest {
-  @ApiProperty({
-    type: Number,
-    description: 'ユーザID',
-    example: 1,
-    required: false,
-  })
-  @IsInt()
-  @IsOptional()
-  userId?: number;
-
   @ApiProperty({
     type: String,
     description: '問い合わせ内容',

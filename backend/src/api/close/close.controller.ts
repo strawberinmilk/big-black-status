@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  ValidationPipe,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { CloseService } from './close.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClosePostRequest, CloseStatusLists } from './dto/close.dto';
 import { Closes } from 'src/db/Close/close.entity';
 import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
+import { PathThroughGuard } from 'src/guards/guard/pathThrough.guard';
+import { Users } from 'src/db/User/user.entity';
 
 @ApiTags('close')
 @Controller('api/close')
@@ -49,8 +59,12 @@ export class CloseController {
     description: '投稿結果',
     type: Closes,
   })
-  post(@Body(new ValidationPipe()) req: ClosePostRequest): Promise<Closes> {
-    return this.closeService.post(req);
+  @UseGuards(PathThroughGuard)
+  async post(
+    @Body(new ValidationPipe()) body: ClosePostRequest,
+    @Request() req: { user: Users },
+  ): Promise<Closes> {
+    return this.closeService.post(body, req.user);
   }
 
   @Get('status')

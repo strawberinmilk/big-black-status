@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { SnackContext } from "../common/SnackComponent";
 
 type ContactFormValue = {
-  userId: number | undefined;
   message: string;
 }
 

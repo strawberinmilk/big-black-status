@@ -141,12 +141,6 @@ export interface ClosePostRequest {
      * @memberof ClosePostRequest
      */
     'closeStatusId': number;
-    /**
-     * ユーザID
-     * @type {number}
-     * @memberof ClosePostRequest
-     */
-    'userId': number;
 }
 /**
  * 
@@ -489,12 +483,6 @@ export interface PostCheckInRequest {
      */
     'longitude': number;
     /**
-     * ユーザID
-     * @type {number}
-     * @memberof PostCheckInRequest
-     */
-    'userId': number;
-    /**
      * 道路ID
      * @type {number}
      * @memberof PostCheckInRequest
@@ -648,6 +636,36 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * ユーザ情報を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        me: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * サインアップする
          * @summary 
          * @param {AuthSignUpRequest} authSignUpRequest 
@@ -720,6 +738,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * ユーザ情報を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async me(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Users>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.me(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.me']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * サインアップする
          * @summary 
          * @param {AuthSignUpRequest} authSignUpRequest 
@@ -763,6 +793,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.login(authLoginRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * ユーザ情報を取得する
+         * @summary 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        me(options?: RawAxiosRequestConfig): AxiosPromise<Users> {
+            return localVarFp.me(options).then((request) => request(axios, basePath));
+        },
+        /**
          * サインアップする
          * @summary 
          * @param {AuthSignUpRequest} authSignUpRequest 
@@ -804,6 +843,17 @@ export class AuthApi extends BaseAPI {
      */
     public login(authLoginRequest: AuthLoginRequest, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).login(authLoginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ユーザ情報を取得する
+     * @summary 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public me(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).me(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

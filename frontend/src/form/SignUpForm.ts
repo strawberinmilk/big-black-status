@@ -28,7 +28,7 @@ export default () => {
             "メールを送信しました。リンクをクリックし認証を完了してください。",
         });
         navigate("/");
-      } catch (e) {
+      } catch (e: any) {
         setSnack({
           isOpen: true,
           type: "error",

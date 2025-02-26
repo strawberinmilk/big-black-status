@@ -19,15 +19,6 @@ export class ClosePostRequest {
   @IsInt()
   @IsNotEmpty()
   closeStatusId: number;
-
-  @ApiProperty({
-    type: Number,
-    description: 'ユーザID',
-    example: 1,
-  })
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
 }
 
 export class CloseStatusList {

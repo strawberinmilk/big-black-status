@@ -19,6 +19,7 @@ import {
   DateUtilService,
   TIMEFORMAT,
 } from 'src/util/dateUtil/dateUtil.service';
+import { Users } from 'src/db/User/user.entity';
 
 @Injectable()
 export class CheckInService {
@@ -49,11 +50,14 @@ export class CheckInService {
    * @param req
    * @returns
    */
-  async create(req: PostCheckInRequest): Promise<ParkingRoads> {
+  async create(
+    req: PostCheckInRequest,
+    loginUser: Users,
+  ): Promise<ParkingRoads> {
     // ユーザが存在するか確認
     const user = await this.userRepository.findOne({
       where: {
-        id: req.userId,
+        id: loginUser.id,
       },
     });
     if (!user) {
@@ -63,6 +67,7 @@ export class CheckInService {
     // 連続チェックインにならないか確認
     const checkIns = await this.checkInRepository.find({
       where: {
+        user: { id: user.id },
         createdAt: MoreThan(
           this.dateUtil
             .getTimeBeforeNow(2, 'hour')

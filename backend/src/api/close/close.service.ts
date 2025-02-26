@@ -13,6 +13,7 @@ import {
 import { CloseStatuses } from 'src/db/CloseStatus/closeStatus.entity';
 import { CloseStatusList } from './dto/close.dto';
 import { ParkingRoads } from 'src/db/ParkingRoads/ParkingRoad.entity';
+import { Users } from 'src/db/User/user.entity';
 
 @Injectable()
 export class CloseService {
@@ -52,20 +53,12 @@ export class CloseService {
    * @param input リクエスト
    * @returns 投稿結果の閉鎖状況
    */
-  async post(input: ClosePostRequest): Promise<Closes> {
-    const closeStatus = await this.closeStatusRepository.findOne({
-      where: { id: input.closeStatusId },
-    });
-    const user = await this.userRepository.findOne({
-      where: { id: input.userId },
-    });
-    const parkingRoad = await this.parkingRoadRepository.findOne({
-      where: { id: input.parkingRoadId },
-    });
+  async post(input: ClosePostRequest, loginUser: Users): Promise<Closes> {
+    console.log(loginUser);
     return await this.closeRepository.save({
-      closeStatus,
-      parkingRoad,
-      user,
+      closeStatus: { id: input.closeStatusId },
+      parkingRoad: { id: input.parkingRoadId },
+      user: loginUser,
     });
   }
 

@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  ValidationPipe,
+  Request,
+} from '@nestjs/common';
 import { CheckInService } from './check-in.service';
 import {
   GetCurrentParkingRequest,
@@ -42,10 +49,12 @@ export class CheckInController {
     description: 'チェックインしたパーキングの情報',
     type: ParkingRoads,
   })
+  @UseGuards(MemberAuthGuard)
   create(
-    @Body(new ValidationPipe()) req: PostCheckInRequest,
+    @Body(new ValidationPipe()) body: PostCheckInRequest,
+    @Request() req: { user: Users },
   ): Promise<ParkingRoads> {
-    return this.checkInService.create(req);
+    return this.checkInService.create(body, req.user);
   }
 
   @Post('get-user-here')

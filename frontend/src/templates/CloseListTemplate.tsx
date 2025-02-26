@@ -23,7 +23,13 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Backdrop, Button, CircularProgress, MenuItem, Select } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { ModalGComponent } from "../common/ModalComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
@@ -31,7 +37,6 @@ import { SnackContext } from "../common/SnackComponent";
 import { CLOSE_DISPLAY, HAKO_SHIBA_TATSU_ROAD_ID } from "../common/constants";
 
 export const CloseListTemplate = () => {
-  const [userId, /* setUserId */] = useState<number>(1); // TODO: ユーザ機能実装後修正
 
   const { closeApi } = Api();
 
@@ -232,7 +237,6 @@ export const CloseListTemplate = () => {
                     await closeApi.post({
                       parkingRoadId: currentPaRoadId,
                       closeStatusId: status.id,
-                      userId,
                     });
                     setSnack({
                       isOpen: true,
@@ -267,7 +271,6 @@ export const CloseListTemplate = () => {
                     await closeApi.post({
                       parkingRoadId: roadId,
                       closeStatusId: CLOSE_DISPLAY,
-                      userId,
                     });
                   })
                 );
@@ -296,9 +299,7 @@ export const CloseListTemplate = () => {
         </p>
       </ModalGComponent>
 
-      <Backdrop
-        open={circleProgressOpen}
-      >
+      <Backdrop open={circleProgressOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
