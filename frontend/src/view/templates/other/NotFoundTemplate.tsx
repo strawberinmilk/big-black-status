@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { TitleMolecule } from "../../molecules/TitleMolecule"
+import { TitleMolecule } from "../../molecules/TitleMolecule";
 
 export const NotFoundTemplate = () => {
   return (
@@ -9,4 +9,4 @@ export const NotFoundTemplate = () => {
       <Link to="/">トップページに戻る</Link>
     </div>
   );
-}
+};

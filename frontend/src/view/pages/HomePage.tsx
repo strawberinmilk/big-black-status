@@ -4,9 +4,9 @@ import { HomeTemplate } from "../templates/HomeTemplate";
 export const HomePage = () => {
   return (
     <>
-    <Helmet>
-      <title>Big Black Status</title>
-    </Helmet>
+      <Helmet>
+        <title>Big Black Status</title>
+      </Helmet>
       <HomeTemplate />
     </>
   );

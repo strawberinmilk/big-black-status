@@ -1,10 +1,10 @@
 import { Form } from "react-router-dom";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
 import { Button } from "@mui/material";
-import SignUpForm from "../../form/SignUpForm";
+import SignUpForm from "../../../form/SignUpForm";
 import { PasswordFieldMolecule } from "../../molecules/form/PasswordFieldMolecule";
 import { TextFieldMolecule } from "../../molecules/form/TextFieldMolecule";
-import { validateConfig } from "../../common/validates";
+import { validateConfig } from "../../../common/validates";
 
 export const AuthSignUpTemplate = () => {
   const { form, method } = SignUpForm();

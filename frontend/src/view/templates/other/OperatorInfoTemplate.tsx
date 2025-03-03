@@ -1,7 +1,7 @@
 import { SubTitleMolecule } from "../../molecules/SubTitmeMolecule";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
 
-import style from "../../style/templates/other/operatorInfo.module.scss";
+import style from "../../../style/templates/other/operatorInfo.module.scss";
 
 export const OperatorInfoTemplate = () => {
   return (

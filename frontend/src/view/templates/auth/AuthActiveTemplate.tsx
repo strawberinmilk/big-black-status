@@ -1,10 +1,10 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
 import { useContext, useEffect, useState } from "react";
-import { Api } from "../../api/api";
+import { Api } from "../../../api/api";
 import { AxiosError } from "axios";
 import { useCookies } from "react-cookie";
-import { SnackContext } from "../../common/SnackComponent";
+import { SnackContext } from "../../../common/SnackComponent";
 
 export const AuthActiveTemplate = () => {
   const authApi = Api().authApi;

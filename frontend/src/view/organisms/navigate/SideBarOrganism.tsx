@@ -1,4 +1,4 @@
-import style from "../../style/organisms/navigate/sideBar.module.scss";
+import style from "../../../style/organisms/navigate/sideBar.module.scss";
 import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import List from "@mui/material/List";
@@ -6,7 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import { Drawer, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ModalGComponent } from "../../common/ModalComponent";
+import { ModalGComponent } from "../../../common/ModalComponent";
 import { useCookies } from "react-cookie";
 
 const pcMinWidth = 1150;

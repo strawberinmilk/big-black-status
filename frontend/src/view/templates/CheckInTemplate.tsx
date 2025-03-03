@@ -1,11 +1,11 @@
 import { Backdrop, Button, CircularProgress } from "@mui/material";
-import { Api } from "../api/api";
+import { Api } from "../../api/api";
 import { useContext, useEffect, useState } from "react";
-import { ParkingRoads, Parkings, Users } from "../api/generated";
-import { SnackContext } from "../common/SnackComponent";
+import { ParkingRoads, Parkings, Users } from "../../api/generated";
+import { SnackContext } from "../../common/SnackComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
-import style from "../style/templates/checkIn.module.scss";
+import style from "../../style/templates/checkIn.module.scss";
 import { AxiosError } from "axios";
 
 export const CheckInTemplate = () => {
@@ -221,11 +221,17 @@ export const CheckInTemplate = () => {
           </Backdrop>
         </>
       )}
-      {pageStatus === "error" && <>
-        <p>この機能はログインすることでご利用になれます。</p>
-        <p>ログインしチェックインすることで今このパーキングエリアにいる人を確認することができます。</p>
-        <p>ログインせずに投稿を行うには閉鎖状況画面の投稿からオープンのステータスをご利用ください</p>
-      </>}
+      {pageStatus === "error" && (
+        <>
+          <p>この機能はログインすることでご利用になれます。</p>
+          <p>
+            ログインしチェックインすることで今このパーキングエリアにいる人を確認することができます。
+          </p>
+          <p>
+            ログインせずに投稿を行うには閉鎖状況画面の投稿からオープンのステータスをご利用ください
+          </p>
+        </>
+      )}
     </>
   );
 };

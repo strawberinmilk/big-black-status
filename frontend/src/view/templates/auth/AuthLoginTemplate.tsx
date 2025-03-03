@@ -1,11 +1,11 @@
 import { Button } from "@mui/material";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
 import { Form, Link } from "react-router-dom";
-import LoginForm from "../../form/LoginForm";
+import LoginForm from "../../../form/LoginForm";
 import { useCookies } from "react-cookie";
 import { TextFieldMolecule } from "../../molecules/form/TextFieldMolecule";
 import { PasswordFieldMolecule } from "../../molecules/form/PasswordFieldMolecule";
-import { validateConfig } from "../../common/validates";
+import { validateConfig } from "../../../common/validates";
 
 export const AuthLoginTemplate = () => {
   const [cookie, , removeCookie] = useCookies(["jwt-token"]);

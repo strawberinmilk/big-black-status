@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { routes } from "./router/router";
 import { SnackGComponent } from "./common/SnackComponent";
-import { SideBarOrganism } from "./organisms/navigate/SideBarOrganism";
+import { SideBarOrganism } from "./view/organisms/navigate/SideBarOrganism";
 import style from "./style/app.module.scss";
 
 const Layout = () => {

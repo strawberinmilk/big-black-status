@@ -1,13 +1,13 @@
 import { Button, TextareaAutosize } from "@mui/material";
 import { TitleMolecule } from "../../molecules/TitleMolecule";
-import style from "../../style/templates/other/contact.module.scss";
+import style from "../../../style/templates/other/contact.module.scss";
 import { Form } from "react-router-dom";
 
-import ContractForm  from "../../form/ContactForm";
+import ContractForm from "../../../form/ContactForm";
 
 export const ContactTemplate = () => {
-  const {form, method} = ContractForm()
-  
+  const { form, method } = ContractForm();
+
   return (
     <>
       <Form onSubmit={method.submit}>

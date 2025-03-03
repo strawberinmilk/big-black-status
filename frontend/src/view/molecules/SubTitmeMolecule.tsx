@@ -1,4 +1,4 @@
-import style from "../style/molecules/subTitle.module.scss"
+import style from "../../style/molecules/subTitle.module.scss"
 
 type Props = {
   title: string,

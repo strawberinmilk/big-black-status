@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Api } from "../api/api";
+import { Api } from "../../api/api";
 import {
   CloseStatuses,
   CloseStatusLists,
   ParkingRoads,
-} from "../api/generated";
+} from "../../api/generated";
 
-import style from "../style/templates/closeList.module.scss";
+import style from "../../style/templates/closeList.module.scss";
 
 import {
   ArcElement,
@@ -30,14 +30,16 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { ModalGComponent } from "../common/ModalComponent";
+import { ModalGComponent } from "../../common/ModalComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
-import { SnackContext } from "../common/SnackComponent";
-import { CLOSE_DISPLAY, HAKO_SHIBA_TATSU_ROAD_ID } from "../common/constants";
+import { SnackContext } from "../../common/SnackComponent";
+import {
+  CLOSE_DISPLAY,
+  HAKO_SHIBA_TATSU_ROAD_ID,
+} from "../../common/constants";
 
 export const CloseListTemplate = () => {
-
   const { closeApi } = Api();
 
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);

@@ -1,15 +1,15 @@
-import { HomePage } from "../pages/HomePage";
-import { ClosePage } from "../pages/ClosePage";
-import { TimelinePage } from "../pages/TimelinePage";
-import { CheckInPage } from "../pages/CheckinPage";
-import { WelcomePage } from "../pages/other/WelcomePage";
-import { OperatorInfoPage } from "../pages/other/OperatorInfomationPage";
-import { PrivacyPolicyPage } from "../pages/other/PrivacyPolicyPage";
-import { ContactPage } from "../pages/other/ContactPage";
-import { notFoundPage } from "../pages/other/NotFoundPage";
-import { AuthActivePage } from "../pages/auth/AuthActivePage";
-import { AuthLoginPage } from "../pages/auth/AuthLoginPage";
-import { AuthSignUpPage } from "../pages/auth/AuthSignUpPage";
+import { HomePage } from "../view/pages/HomePage";
+import { ClosePage } from "../view/pages/ClosePage";
+import { TimelinePage } from "../view/pages/TimelinePage";
+import { CheckInPage } from "../view/pages/CheckinPage";
+import { WelcomePage } from "../view/pages/other/WelcomePage";
+import { OperatorInfoPage } from "../view/pages/other/OperatorInfomationPage";
+import { PrivacyPolicyPage } from "../view/pages/other/PrivacyPolicyPage";
+import { ContactPage } from "../view/pages/other/ContactPage";
+import { notFoundPage } from "../view/pages/other/NotFoundPage";
+import { AuthActivePage } from "../view/pages/auth/AuthActivePage";
+import { AuthLoginPage } from "../view/pages/auth/AuthLoginPage";
+import { AuthSignUpPage } from "../view/pages/auth/AuthSignUpPage";
 
 export const routes = [
   {
