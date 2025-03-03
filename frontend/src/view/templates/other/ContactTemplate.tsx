@@ -4,13 +4,15 @@ import style from "../../../style/templates/other/contact.module.scss";
 import { Form } from "react-router-dom";
 
 import ContractForm from "../../../form/ContactForm";
+import { WaitCircleForm } from "../../../common/WaitCircleForm";
 
 export const ContactTemplate = () => {
   const { form, method } = ContractForm();
+  const { handleSend, WaitCircle } = WaitCircleForm();
 
   return (
     <>
-      <Form onSubmit={method.submit}>
+      <Form onSubmit={() => handleSend(method.submit)}>
         <TitleMolecule title="お問い合わせ" />
         <p>問い合わせ内容</p>
         <TextareaAutosize
@@ -21,6 +23,7 @@ export const ContactTemplate = () => {
         />
         <Button type="submit">送信</Button>
       </Form>
+      <WaitCircle />
     </>
   );
 };

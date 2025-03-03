@@ -23,13 +23,7 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {
-  Backdrop,
-  Button,
-  CircularProgress,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Button, MenuItem, Select } from "@mui/material";
 import { ModalGComponent } from "../../common/ModalComponent";
 import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
@@ -38,9 +32,11 @@ import {
   CLOSE_DISPLAY,
   HAKO_SHIBA_TATSU_ROAD_ID,
 } from "../../common/constants";
+import { WaitCircleForm } from "../../common/WaitCircleForm";
 
 export const CloseListTemplate = () => {
   const { closeApi } = Api();
+  const { handleSend, WaitCircle } = WaitCircleForm();
 
   const [paRoadList, setPaRoadList] = useState<ParkingRoads[]>([]);
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);
@@ -49,8 +45,6 @@ export const CloseListTemplate = () => {
   const [pieData, setPieData] = useState<ChartData<"pie", number[], unknown>>();
   const [barData, setBarData] = useState<ChartData<"bar", number[], unknown>>();
   const [postModalIsOpen, setPostModalIsOpen] = useState<boolean>(false);
-
-  const [circleProgressOpen, setCircleProgressOpen] = useState(false);
 
   const { setSnack } = useContext(SnackContext);
 
@@ -234,27 +228,27 @@ export const CloseListTemplate = () => {
                   color: "black",
                 }}
                 onClick={async () => {
-                  setCircleProgressOpen(true);
                   try {
-                    await closeApi.post({
-                      parkingRoadId: currentPaRoadId,
-                      closeStatusId: status.id,
-                    });
+                    await handleSend(
+                      async () =>
+                        await closeApi.post({
+                          parkingRoadId: currentPaRoadId,
+                          closeStatusId: status.id,
+                        })
+                    );
                     setSnack({
                       isOpen: true,
                       type: "success",
                       message: "投稿しました",
                     });
+                    postModalClose();
                   } catch {
                     setSnack({
                       isOpen: true,
                       type: "error",
                       message: "投稿に失敗しました",
                     });
-                  } finally {
-                    setCircleProgressOpen(false);
                   }
-                  postModalClose();
                 }}
               >
                 {status.statusJpName}
@@ -266,30 +260,29 @@ export const CloseListTemplate = () => {
           <Button
             variant="contained"
             onClick={async () => {
-              setCircleProgressOpen(true);
               try {
-                Promise.all(
-                  HAKO_SHIBA_TATSU_ROAD_ID.map(async (roadId) => {
-                    await closeApi.post({
-                      parkingRoadId: roadId,
-                      closeStatusId: CLOSE_DISPLAY,
-                    });
-                  })
+                await handleSend(async () =>
+                  Promise.all(
+                    HAKO_SHIBA_TATSU_ROAD_ID.map(async (roadId) => {
+                      await closeApi.post({
+                        parkingRoadId: roadId,
+                        closeStatusId: CLOSE_DISPLAY,
+                      });
+                    })
+                  )
                 );
-
                 setSnack({
                   isOpen: true,
                   type: "success",
                   message: "投稿しました",
                 });
+                postModalClose();
               } catch {
                 setSnack({
                   isOpen: true,
                   type: "error",
                   message: "投稿に失敗しました",
                 });
-              } finally {
-                setCircleProgressOpen(false);
               }
             }}
           >
@@ -299,11 +292,12 @@ export const CloseListTemplate = () => {
         <p>
           既にPAにいる場合はチェックイン機能をご利用ください。確度の高い情報として扱われます。
         </p>
+        <WaitCircle />
       </ModalGComponent>
 
-      <Backdrop open={circleProgressOpen}>
+      {/* <Backdrop open={circleProgressOpen}>
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
     </>
   );
 };

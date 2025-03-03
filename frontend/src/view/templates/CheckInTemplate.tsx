@@ -1,4 +1,4 @@
-import { Backdrop, Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
 import { Api } from "../../api/api";
 import { useContext, useEffect, useState } from "react";
 import { ParkingRoads, Parkings, Users } from "../../api/generated";
@@ -7,17 +7,18 @@ import { TitleMolecule } from "../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
 import style from "../../style/templates/checkIn.module.scss";
 import { AxiosError } from "axios";
+import { WaitCircleForm } from "../../common/WaitCircleForm";
 
 export const CheckInTemplate = () => {
   const checkInApi = Api().checkInApi;
   const authApi = Api().authApi;
   const { setSnack } = useContext(SnackContext);
+  const { WaitCircle, fourceCircleEnd, fourceCircleStart } = WaitCircleForm();
 
   const [userId, setUserId] = useState<number>(0);
   const [pageStatus, setPageStatus] = useState<"loading" | "error" | "success">(
     "loading"
   );
-  const [circleProgressOpen, setCircleProgressOpen] = useState(false);
 
   // パーキングはページを開いた時点でロード
   const [currentParking, setCurrentParking] = useState<Parkings | null>(null);
@@ -49,7 +50,7 @@ export const CheckInTemplate = () => {
 
   // 現在地のパーキングを取得
   const getCurrentParking = async () => {
-    setCircleProgressOpen(true);
+    fourceCircleStart();
     const position = await getLocation();
     if (!position) return;
     await checkInApi
@@ -61,18 +62,18 @@ export const CheckInTemplate = () => {
           type: "error",
           message: "パーキングエリアが取得できませんでした",
         });
-        setCircleProgressOpen(false);
+        fourceCircleEnd();
       });
-    setCircleProgressOpen(false);
+    fourceCircleEnd();
     return position;
   };
 
   // チェックイン
   const checkIn = async (roadId: number) => {
-    setCircleProgressOpen(true);
+    fourceCircleStart();
     const position = await getCurrentParking();
     if (!position) {
-      setCircleProgressOpen(false);
+      fourceCircleEnd();
       return;
     }
 
@@ -87,7 +88,7 @@ export const CheckInTemplate = () => {
         setCurrentParking(res.data.parking);
         setCurrentRoad(res.data);
         await getUserHere(res.data.id);
-        setCircleProgressOpen(false);
+        fourceCircleEnd();
       })
       .catch((e: AxiosError) => {
         setSnack({
@@ -95,7 +96,7 @@ export const CheckInTemplate = () => {
           type: "error",
           message: (e.response?.data as any).message,
         });
-        setCircleProgressOpen(false);
+        fourceCircleEnd();
       });
   };
 
@@ -216,9 +217,7 @@ export const CheckInTemplate = () => {
             </>
           )}
 
-          <Backdrop open={circleProgressOpen}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
+          <WaitCircle />
         </>
       )}
       {pageStatus === "error" && (

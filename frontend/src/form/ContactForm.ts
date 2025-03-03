@@ -15,7 +15,7 @@ export default() => {
   const { setSnack } = useContext(SnackContext);
 
   const submit = async () => {
-    form.handleSubmit(async () => {
+    await form.handleSubmit(async () => {
       try {
         await contactApi.create(form.getValues())
         setSnack({
