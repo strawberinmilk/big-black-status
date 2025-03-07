@@ -3,7 +3,7 @@ require('dotenv').config({ path: '../.env' });
 module.exports = new typeorm.DataSource({
   type: 'postgres',
   host: 'localhost',
-  port: 10103,
+  port: process.env.POSTGRES_PORT,
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
