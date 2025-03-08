@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://big-black-status.com/sitemap.txt
