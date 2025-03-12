@@ -10,6 +10,8 @@ import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { RegisterOptions } from "react-hook-form";
 
+import style from "../../../style/molecules/form/passwordField.module.scss";
+
 type Props = {
   label: string;
   form: UseFormReturn<any>;
@@ -34,6 +36,7 @@ export const PasswordFieldMolecule = (props: Props) => {
         </InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
+          className={style.passwordField}
           type={showPassword ? "text" : "password"}
           endAdornment={
             <InputAdornment position="end">

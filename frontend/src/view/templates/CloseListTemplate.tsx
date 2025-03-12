@@ -34,6 +34,8 @@ import {
 } from "../../common/constants";
 import { WaitCircleForm } from "../../common/WaitCircleForm";
 
+import { PieChart } from "@mui/x-charts/PieChart";
+
 export const CloseListTemplate = () => {
   const { closeApi } = Api();
   const { handleSend, WaitCircle } = WaitCircleForm();
@@ -42,7 +44,8 @@ export const CloseListTemplate = () => {
   const [statusList, setStatusList] = useState<CloseStatuses[]>([]);
   const [closeStatusList, setCloseStatusList] = useState<CloseStatusLists>();
   const [currentPaRoadId, setCurrentPaRoadId] = useState<number>(1);
-  const [pieData, setPieData] = useState<ChartData<"pie", number[], unknown>>();
+  const [pieData, setPieData] =
+    useState<{ id: number; value: number; label: string; color: string }[]>();
   const [barData, setBarData] = useState<ChartData<"bar", number[], unknown>>();
   const [postModalIsOpen, setPostModalIsOpen] = useState<boolean>(false);
 
@@ -87,7 +90,7 @@ export const CloseListTemplate = () => {
   // 閲覧中のPA道路又は投稿情報が変更された場合に再描画
   useEffect(() => {
     if (!closeStatusList) return;
-    setPieData({
+    /* setPieData({
       labels: statusList.map((status) => status.statusJpName),
       datasets: [
         {
@@ -102,7 +105,22 @@ export const CloseListTemplate = () => {
           ),
         },
       ],
-    });
+    }); */
+    setPieData(
+      statusList.map((status, index) => {
+        return {
+          id: index,
+          label: status.statusJpName,
+          value: (
+            closeStatusList.list[currentPaRoadId].last30MinuteStatus as Record<
+              string,
+              number
+            >
+          )[status.status],
+          color: status.colorCode,
+        };
+      })
+    );
 
     const every10 = closeStatusList.list[currentPaRoadId].every10MinuteStatus;
     const lineDataSets = Object.keys(every10).map((status) => {
@@ -156,7 +174,7 @@ export const CloseListTemplate = () => {
       {pieData && closeStatusList && (
         <>
           <h3>過去30分間の投稿数</h3>
-          <Pie
+          {/* <Pie
             className={style.pieGraph}
             data={pieData}
             options={{
@@ -172,6 +190,22 @@ export const CloseListTemplate = () => {
                   labels: {
                     color: "white",
                   },
+                },
+              },
+            }}
+          /> */}
+          <PieChart
+            className={style.pieGraph}
+            series={[{ data: pieData }]}
+            width={500}
+            height={500}
+            slotProps={{
+              legend: {
+                direction: "row",
+                position: { vertical: "top", horizontal: "middle" },
+                padding: 0,
+                labelStyle: {
+                  fill: "white",
                 },
               },
             }}

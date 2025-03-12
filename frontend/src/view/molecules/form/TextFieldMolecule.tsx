@@ -1,6 +1,8 @@
 import { RegisterOptions, UseFormReturn } from "react-hook-form";
 import { FormControl, TextField } from "@mui/material";
 
+import style from "../../../style/molecules/form/textField.module.scss";
+
 type Props = {
   label: string;
   form: UseFormReturn<any>;
@@ -13,7 +15,11 @@ export const TextFieldMolecule = ({ label, form, name, validate }: Props) => {
   return (
     <div>
       <FormControl>
-        <TextField label={label} {...form.register(name, validate)} />
+        <TextField
+          className={style.textField}
+          label={label}
+          {...form.register(name, validate)}
+        />
       </FormControl>
       <br />
       {typeof errorMessage === "string" && (
