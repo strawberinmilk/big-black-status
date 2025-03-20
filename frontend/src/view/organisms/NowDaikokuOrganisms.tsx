@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Api } from "../../api/api";
-import { CloseStatuses, CloseStatusLists } from "../../api/generated";
 import { DAIKOKU_ROAD_ID } from "../../common/constants";
 import style from "../../style/organisms/nowDaikoku.module.scss";
 

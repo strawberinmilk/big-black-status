@@ -20,7 +20,7 @@ import {
   LineElement,
   BarElement,
 } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Button, MenuItem, Select } from "@mui/material";
