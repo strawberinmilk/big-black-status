@@ -141,7 +141,7 @@ export const CloseListTemplate = () => {
     });
   }, [closeStatusList, currentPaRoadId, statusList]);
 
-  const SelectPa = (
+  const SelectPa = () => (
     <Select
       className={style.selectPa}
       label="PA"
@@ -169,7 +169,7 @@ export const CloseListTemplate = () => {
       <SubTitleMolecule title="閉鎖状況を確認する" />
       <p>パーキングを選択し、状況を確認できます。</p>
       <p>チェックインはすでにPAにいる人の投稿ですので確度の高い情報です。</p>
-      {SelectPa}
+      <SelectPa />
 
       {pieData && closeStatusList && (
         <>
@@ -205,7 +205,7 @@ export const CloseListTemplate = () => {
                 position: { vertical: "top", horizontal: "middle" },
                 padding: 0,
                 labelStyle: {
-                  fill: "white",
+                  fill: "#222222",
                 },
               },
             }}
@@ -227,7 +227,7 @@ export const CloseListTemplate = () => {
               },
               legend: {
                 labels: {
-                  color: "white",
+                  color: "#222222",
                 },
               },
             },
@@ -235,12 +235,12 @@ export const CloseListTemplate = () => {
             scales: {
               x: {
                 ticks: {
-                  color: "white",
+                  color: "#222222",
                 },
               },
               y: {
                 ticks: {
-                  color: "white",
+                  color: "#222222",
                 },
               },
             },
@@ -250,7 +250,7 @@ export const CloseListTemplate = () => {
 
       <ModalGComponent isOpen={postModalIsOpen} onClose={postModalClose}>
         <h3>閉鎖状況を投稿する</h3>
-        <div>{SelectPa}</div>
+        <SelectPa />
         <div>
           {statusList.map((status) => {
             if (status.status === "check_in") return;

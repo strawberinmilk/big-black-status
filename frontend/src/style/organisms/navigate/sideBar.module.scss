@@ -4,6 +4,8 @@
   height: 100vh;
   width: constants.$WIDTH_SIDE_BAR;
   position: fixed;
+  background-color: constants.$HIGHWAY_GREEN;
+  color: white;
 }
 
 .mobile {
@@ -17,7 +19,8 @@
   height: 35px;
   width: 100vw;
   position: fixed;
-  background-color: constants.$COLOR_SITE_HEADER;
+  background-color: constants.$HIGHWAY_GREEN;
+  color: white;
   svg {
     position: absolute;
   }
@@ -33,7 +36,7 @@
 .title_pc {
   font-family: constants.$FONT_TITLE;
   text-align: center;
-  background: radial-gradient(ellipse at center, constants.$COLOR_SITE_HEADER, #ffffff00);
+  // background: radial-gradient(ellipse at center, constants.$HIGHWAY_GREEN, #ffffff00);
 }
 
 .title_mobile {

@@ -1,8 +1,10 @@
+@use "../constants.scss";
+
 .subTitle {
   padding: 0.5em;
-  color: #f7ffc7;
-  border-left: solid 5px #fff458;
+  color: #ffffff;
+  border-left: solid 5px #fcff58;
   font-size: 1.5em;
-  background: -webkit-linear-gradient(to right, #01103a, transparent);
-  background: linear-gradient(to right, #01103a, transparent);
+  background: -webkit-linear-gradient(to right, constants.$HIGHWAY_GREEN, transparent);
+  background: linear-gradient(to right, constants.$HIGHWAY_GREEN, transparent);
 }

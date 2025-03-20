@@ -1,0 +1,25 @@
+@use "../constants.scss";
+
+.parent {
+  background-color: #444444;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+
+  padding: 20px;
+  padding-top: 5px;
+  .direction {
+    background-color: constants.$HIGHWAY_GREEN;
+    color: #ffffff;
+    font-size: 1.5em;
+  }
+  .display {
+    background-color: #000000;
+
+    p {
+      margin: 5px;
+      color: #ff9100;
+      font-size: 2em;
+    }
+  }
+}

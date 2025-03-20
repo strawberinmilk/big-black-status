@@ -55,15 +55,20 @@ export const OperatorInfoTemplate = () => {
             className="twitter-follow-button"
             data-size="large"
             data-show-count="false"
+            target="_blank"
           >
             X(Twitter)
           </a>
         </li>
         <li>
-          <a href="https://github.com/strawberinmilk">GitHub</a>
+          <a href="https://github.com/strawberinmilk" target="_blank">
+            GitHub
+          </a>
         </li>
         <li>
-          <a href="https://qiita.com/strawbeRinMilk">Qiita</a>
+          <a href="https://qiita.com/strawbeRinMilk" target="_blank">
+            Qiita
+          </a>
         </li>
       </ul>
 

@@ -1,5 +1,6 @@
 import { TitleMolecule } from "../../molecules/TitleMolecule";
 import { SubTitleMolecule } from "../../molecules/SubTitmeMolecule";
+import style from "../../../style/templates/other/welcome.module.scss";
 
 export const WelcomeTemplate = () => {
   return (
@@ -9,6 +10,7 @@ export const WelcomeTemplate = () => {
       <p>
         大黒PAを始めとした首都高のパーキングエリアは夜間時間帯に閉鎖される事が多々あります。
       </p>
+      <img className={style.image} src="/img/daikoku-close.jpg" alt="閉鎖された大黒PA" />
       <p>
         この情報は電光掲示板による案内を除き公式発表されることはないため、PAに入れるかどうかは首都高に上がるまでわかりません。
       </p>
@@ -26,6 +28,7 @@ export const WelcomeTemplate = () => {
       <p>
         「投稿する」ボタンを押下するとポップアップが開きます。PAを選択し、以下のステータス説明を参考に投稿してください。
       </p>
+      <img className={style.image} src="/img/close-post.png" alt="閉鎖投稿画面のスクリーンショット" />
       <p>
         画面中ほどの円グラフは過去30分間にそのPAに入った投稿の集計が確認できます。
       </p>
@@ -99,6 +102,7 @@ export const WelcomeTemplate = () => {
       <p>
         チェックインに成功すると2時間以内にチェックインしたユーザが表示されます。もし知り合いがいれば声を掛けに行きましょう！
       </p>
-    </>
+      <img className={style.image} src="/img/checkin-success.png" alt="閉鎖投稿画面のスクリーンショット" />
+      </>
   );
 };
