@@ -1,7 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from 'src/db/User/user.repository';
-import { ActiveRequest, AuthSignUpRequest } from './dto/auth.dto';
+import {
+  ActiveRequest,
+  AuthSignUpRequest,
+  EmailDto,
+  PasswordResetSetRequest,
+} from './dto/auth.dto';
 import { UserActive, UserRoleId } from 'src/db/User/user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtPayload, JwtToken } from './dto/auth.type';
@@ -50,7 +55,7 @@ export class AuthService {
         html:
           '<p>以下のリンクをクリックしてアカウントを有効化してください</p>' +
           `<a href="${this.configService.get<string>('FRONTEND_URL')}/auth/active?token=${tmpToken}">アカウント有効化</a>` +
-          '<p>1時間有効</p>',
+          '', // '<p>1時間有効</p>',
       });
     } catch (e) {
       console.log(e);
@@ -80,6 +85,52 @@ export class AuthService {
     user.active = UserActive.ACTIVE;
     await this.userRepository.save(user);
     // return user;
+
+    // JWTトークンを発行
+    const payload = { sub: user.id, email: user.email };
+    const accessToken = this.jwtService.sign(payload);
+
+    return { access_token: accessToken };
+  }
+
+  async passwordResetRequest(input: EmailDto) {
+    const user = await this.userRepository.findByEmail(input.email);
+    if (!user) {
+      throw new UnauthorizedException('メールアドレスが存在しません');
+    }
+    if (user.tmpToken) {
+      throw new UnauthorizedException('すでにリクエストがあります');
+    }
+
+    const tmpToken = uuidv4();
+    user.tmpToken = tmpToken;
+    await this.userRepository.save(user);
+
+    try {
+      await this.mailService.sendMail({
+        from: 'BigBlackStatus',
+        to: input.email,
+        subject: 'パスワードリセット',
+        html:
+          '<p>以下のリンクをクリックしてパスワードをリセットしてください</p>' +
+          `<a href="${this.configService.get<string>('FRONTEND_URL')}/auth/password-reset/set?token=${tmpToken}">パスワードリセット</a>` +
+          '', // '<p>1時間有効</p>',
+      });
+    } catch (e) {
+      console.log(e);
+      return 'fail';
+    }
+    return 'success';
+  }
+
+  async passwordResetSet(input: PasswordResetSetRequest) {
+    const user = await this.userRepository.findByTmpToken(input.token);
+    if (!user) {
+      throw new UnauthorizedException('トークンが無効または期限切れです');
+    }
+    user.password = bcrypt.hashSync(input.password, 10);
+    user.tmpToken = null;
+    await this.userRepository.save(user);
 
     // JWTトークンを発行
     const payload = { sub: user.id, email: user.email };

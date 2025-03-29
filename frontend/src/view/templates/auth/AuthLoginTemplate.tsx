@@ -47,7 +47,14 @@ export const AuthLoginTemplate = () => {
             <br />
             <Button type="submit">ログイン</Button>
           </Form>
-          <Link to="/auth/signup">アカウントを新規作成</Link>
+          <p>
+            <Link to="/auth/signup">アカウントを新規作成</Link>
+          </p>
+          <p>
+            <Link to="/auth/password-reset/request">
+              パスワードをお忘れの方はこちら
+            </Link>
+          </p>
         </>
       )}
     </>

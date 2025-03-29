@@ -12,6 +12,8 @@ import {
   AuthLoginRequest,
   AuthSignUpRequest,
   ActiveRequest,
+  EmailDto,
+  PasswordResetSetRequest,
 } from './dto/auth.dto';
 import { JwtToken } from './dto/auth.type';
 import { LoginAuthGuard } from 'src/guards/guard/login.guard';
@@ -86,7 +88,38 @@ export class AuthController {
   })
   @UseGuards(MemberAuthGuard)
   async me(@Request() req: { user: Users }): Promise<Users> {
-    console.log(req.user);
     return req.user;
+  }
+
+  @Post('password-reset/request')
+  @ApiOperation({
+    operationId: 'passwordResetRequest',
+    description: 'パスワードリセットを要求する',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'リセット結果',
+    type: String,
+  })
+  async passwordReset(
+    @Body(new ValidationPipe()) input: EmailDto,
+  ): Promise<string> {
+    return this.authService.passwordResetRequest(input);
+  }
+
+  @Post('password-reset/set')
+  @ApiOperation({
+    operationId: 'passwordResetSet',
+    description: 'パスワードリセットを行う',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'ユーザ情報',
+    type: JwtToken,
+  })
+  async passwordResetSet(
+    @Body(new ValidationPipe()) input: PasswordResetSetRequest,
+  ): Promise<JwtToken> {
+    return this.authService.passwordResetSet(input);
   }
 }

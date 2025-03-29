@@ -9,3 +9,5 @@ https://big-black-status.com/contact
 https://big-black-status.com/auth/login
 https://big-black-status.com/auth/signup
 https://big-black-status.com/auth/active
+https://big-black-status.com/auth/password-reset/request
+https://big-black-status.com/auth/password-reset/set

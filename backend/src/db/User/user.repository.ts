@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, MoreThan, Repository } from 'typeorm';
 import { Users } from './user.entity';
 import * as bcrypt from 'bcryptjs';
-import { DateUtilService, TIMEFORMAT } from 'src/util/dateUtil/dateUtil.service';
+import {
+  DateUtilService,
+  TIMEFORMAT,
+} from 'src/util/dateUtil/dateUtil.service';
 
 @Injectable()
 export class UserRepository extends Repository<Users> {
@@ -50,7 +53,7 @@ export class UserRepository extends Repository<Users> {
     const user = await this.findOne({
       where: {
         tmpToken,
-        createdAt: MoreThan(
+        updatedAt: MoreThan(
           this.dateUtilService
             .getTimeBeforeNow(1, 'hour')
             .format(TIMEFORMAT.timestamp),

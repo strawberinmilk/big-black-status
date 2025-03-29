@@ -10,6 +10,8 @@ import { notFoundPage } from "../view/pages/other/NotFoundPage";
 import { AuthActivePage } from "../view/pages/auth/AuthActivePage";
 import { AuthLoginPage } from "../view/pages/auth/AuthLoginPage";
 import { AuthSignUpPage } from "../view/pages/auth/AuthSignUpPage";
+import { AuthPasswordResetRequestPage } from "../view/pages/auth/AuthPasswordResetRequestPage";
+import { AuthPasswordResetSetPage } from "../view/pages/auth/AuthPasswordResetSetPage";
 
 export const routes = [
   {
@@ -48,6 +50,11 @@ export const routes = [
   { path: "/auth/login", Component: AuthLoginPage },
   { path: "/auth/signup", Component: AuthSignUpPage },
   { path: "/auth/active", Component: AuthActivePage },
+  {
+    path: "/auth/password-reset/request",
+    Component: AuthPasswordResetRequestPage,
+  },
+  { path: "/auth/password-reset/set", Component: AuthPasswordResetSetPage },
   {
     path: "*",
     Component: notFoundPage,

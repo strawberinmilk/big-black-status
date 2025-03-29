@@ -233,6 +233,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/Users'
       tags: *ref_2
+  /api/auth/password-reset/request:
+    post:
+      operationId: passwordResetRequest
+      summary: ''
+      description: パスワードリセットを要求する
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailDto'
+      responses:
+        '200':
+          description: リセット結果
+          content:
+            application/json:
+              schema:
+                type: string
+      tags: *ref_2
+  /api/auth/password-reset/set:
+    post:
+      operationId: passwordResetSet
+      summary: ''
+      description: パスワードリセットを行う
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetSetRequest'
+      responses:
+        '200':
+          description: ユーザ情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      tags: *ref_2
 info:
   title: Cats example
   description: The cats API description
@@ -604,4 +644,27 @@ components:
           description: アクティブトークン
           example: a59989d4-2bbe-4371-ad27-b0c3ecbfc513
       required:
+        - token
+    EmailDto:
+      type: object
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: hoge@example.com
+      required:
+        - email
+    PasswordResetSetRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: パスワード
+          example: fwe&3FD7Du2
+        token:
+          type: string
+          description: リセットトークン
+          example: a59989d4-2bbe-4371-ad27-b0c3ecbfc513
+      required:
+        - password
         - token

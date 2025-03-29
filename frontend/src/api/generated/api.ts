@@ -297,17 +297,24 @@ export interface Contacts {
  */
 export interface CreateContactRequest {
     /**
-     * ユーザID
-     * @type {number}
-     * @memberof CreateContactRequest
-     */
-    'userId'?: number;
-    /**
      * 問い合わせ内容
      * @type {string}
      * @memberof CreateContactRequest
      */
     'message': string;
+}
+/**
+ * 
+ * @export
+ * @interface EmailDto
+ */
+export interface EmailDto {
+    /**
+     * メールアドレス
+     * @type {string}
+     * @memberof EmailDto
+     */
+    'email': string;
 }
 /**
  * 
@@ -463,6 +470,25 @@ export interface Parkings {
      * @memberof Parkings
      */
     'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface PasswordResetSetRequest
+ */
+export interface PasswordResetSetRequest {
+    /**
+     * パスワード
+     * @type {string}
+     * @memberof PasswordResetSetRequest
+     */
+    'password': string;
+    /**
+     * リセットトークン
+     * @type {string}
+     * @memberof PasswordResetSetRequest
+     */
+    'token': string;
 }
 /**
  * 
@@ -666,6 +692,78 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * パスワードリセットを要求する
+         * @summary 
+         * @param {EmailDto} emailDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        passwordResetRequest: async (emailDto: EmailDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'emailDto' is not null or undefined
+            assertParamExists('passwordResetRequest', 'emailDto', emailDto)
+            const localVarPath = `/api/auth/password-reset/request`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(emailDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * パスワードリセットを行う
+         * @summary 
+         * @param {PasswordResetSetRequest} passwordResetSetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        passwordResetSet: async (passwordResetSetRequest: PasswordResetSetRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'passwordResetSetRequest' is not null or undefined
+            assertParamExists('passwordResetSet', 'passwordResetSetRequest', passwordResetSetRequest)
+            const localVarPath = `/api/auth/password-reset/set`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passwordResetSetRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * サインアップする
          * @summary 
          * @param {AuthSignUpRequest} authSignUpRequest 
@@ -750,6 +848,32 @@ export const AuthApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * パスワードリセットを要求する
+         * @summary 
+         * @param {EmailDto} emailDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async passwordResetRequest(emailDto: EmailDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.passwordResetRequest(emailDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.passwordResetRequest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * パスワードリセットを行う
+         * @summary 
+         * @param {PasswordResetSetRequest} passwordResetSetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async passwordResetSet(passwordResetSetRequest: PasswordResetSetRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtToken>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.passwordResetSet(passwordResetSetRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.passwordResetSet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * サインアップする
          * @summary 
          * @param {AuthSignUpRequest} authSignUpRequest 
@@ -800,6 +924,26 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         me(options?: RawAxiosRequestConfig): AxiosPromise<Users> {
             return localVarFp.me(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パスワードリセットを要求する
+         * @summary 
+         * @param {EmailDto} emailDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        passwordResetRequest(emailDto: EmailDto, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.passwordResetRequest(emailDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パスワードリセットを行う
+         * @summary 
+         * @param {PasswordResetSetRequest} passwordResetSetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        passwordResetSet(passwordResetSetRequest: PasswordResetSetRequest, options?: RawAxiosRequestConfig): AxiosPromise<JwtToken> {
+            return localVarFp.passwordResetSet(passwordResetSetRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * サインアップする
@@ -854,6 +998,30 @@ export class AuthApi extends BaseAPI {
      */
     public me(options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).me(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パスワードリセットを要求する
+     * @summary 
+     * @param {EmailDto} emailDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public passwordResetRequest(emailDto: EmailDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).passwordResetRequest(emailDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パスワードリセットを行う
+     * @summary 
+     * @param {PasswordResetSetRequest} passwordResetSetRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public passwordResetSet(passwordResetSetRequest: PasswordResetSetRequest, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).passwordResetSet(passwordResetSetRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
