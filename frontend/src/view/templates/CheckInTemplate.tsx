@@ -8,6 +8,7 @@ import { SubTitleMolecule } from "../molecules/SubTitmeMolecule";
 import style from "../../style/templates/checkIn.module.scss";
 import { AxiosError } from "axios";
 import { WaitCircleForm } from "../../common/WaitCircleForm";
+import { TwitterShareButton } from "react-twitter-embed";
 
 export const CheckInTemplate = () => {
   const checkInApi = Api().checkInApi;
@@ -195,23 +196,13 @@ export const CheckInTemplate = () => {
                 <p>誰もいないようです</p>
               )}
 
-              <a
-                href="https://twitter.com/share?ref_src=twsrc%5Etfw"
-                className="twitter-share-button"
-                data-size="large"
-                data-text={`現在地は${currentParking.name} ${currentRoad.name}です。`}
-                data-url={`${import.meta.env.VITE_FRONTEND_URL}`}
-                data-hashtags="BigBlackStatus"
-                data-lang="ja"
-                data-show-count="false"
-              >
-                Tweet
-              </a>
-              <script
-                async
-                src="https://platform.twitter.com/widgets.js"
-                charSet="utf-8"
-              ></script>
+              <TwitterShareButton
+                url={`${import.meta.env.VITE_FRONTEND_URL}`}
+                options={{
+                  text: `現在地は${currentParking.name} ${currentRoad.name}です。`,
+                  via: "strawberinmilk",
+                }}
+              />
 
               {/* TODO: タイムラインへの導線 */}
             </>
