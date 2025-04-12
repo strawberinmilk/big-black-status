@@ -18,7 +18,7 @@ export default () => {
   const submit = async () => {
     form.handleSubmit(async () => {
       try {
-        const res = await authApi.passwordResetRequest(form.getValues());
+        await authApi.passwordResetRequest(form.getValues());
         setSnack({
           isOpen: true,
           type: "success",
